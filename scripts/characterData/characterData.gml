@@ -287,21 +287,198 @@ global.battleChoices =
 	},
 }
 
-// Weapons
-// Baseline damage = 4
-// Slashing weapons: +.5 wieldiness, +2 bleed
-// Piercing weapons: +1 wieldiness, +.5 crit, +1 bleed
-// Splitting weapons +1 damage, +1 penetration, -1 wieldiness
-// Crushing weapons: -1 crit, -2 bleed, +3 penetration
+// Weapon properties to derive stats from
+global.weaponProperties = 
+{
+	
+	base:
+	{
+		damage : 4,
+		crit : 0,
+		wieldiness : 0,
+		penetration : 0,
+		bleed : 0,
+		stun : 0,
+		range : 0,
+		hits : 1,
+		encumbrance : -1,
+	},
+	
+	slashing:
+	{
+		damage : 0,
+		crit : 0,
+		wieldiness : .5,
+		penetration : 0,
+		bleed : 2,
+		stun : 0,
+		range : 0,
+		hits : 0,
+		encumbrance : 0,
+	},
+
+	piercing:
+	{
+		damage : 0,
+		crit : .5,
+		wieldiness : 1,
+		penetration : 0,
+		bleed : 1,
+		stun : 0,
+		range : 0,
+		hits : 0,
+		encumbrance : 0,
+	},
+	
+	splitting:
+	{
+		damage : 1,
+		crit : 0,
+		wieldiness : -1,
+		penetration : 1,
+		bleed : 0,
+		stun : .5,
+		range : 0,
+		hits : 0,
+		encumbrance : 0,
+	},
+	
+	crushing:
+	{
+		damage : 0,
+		crit : -1,
+		wieldiness : 0,
+		penetration : 2.5,
+		bleed : -1,
+		stun : 1,
+		range : 0,
+		hits : 0,
+		encumbrance : 0,
+	},
+	
+	pole:
+	{
+		damage : 0,
+		crit : 0,
+		wieldiness : 0,
+		penetration : 0,
+		bleed : 0,
+		stun : 0,
+		range : 1,
+		hits : 0,
+		encumbrance : -.5,
+	},
+	
+	thrownLight:
+	{
+		damage : 0,
+		crit : 0,
+		wieldiness : -2,
+		penetration : 0,
+		bleed : 0,
+		stun : 0,
+		range : 2,
+		hits : 0,
+		encumbrance : 0,
+	},
+	
+	thrownHeavy:
+	{
+		damage : 0,
+		crit : 0,
+		wieldiness : -1,
+		penetration : 0,
+		bleed : 0,
+		stun : 0,
+		range : 2,
+		hits : 0,
+		encumbrance : -.5,
+	},
+	
+	missile:
+	{
+		damage : 0,
+		crit : 0,
+		wieldiness : -1,
+		penetration : 0,
+		bleed : 0,
+		stun : 0,
+		range : 2,
+		hits : 0,
+		encumbrance : -.5,
+	},
+
+	verySmall:
+	{
+		damage : -2,
+		crit : 1,
+		wieldiness : 0,
+		penetration : 0,
+		bleed : 0,
+		stun : -1,
+		range : 0,
+		hits : 0,
+		encumbrance : 1,
+	},
+	
+	small:
+	{
+		damage : -1,
+		crit : .5,
+		wieldiness : 0,
+		penetration : 0,
+		bleed : 0,
+		stun : -.5,
+		range : 0,
+		hits : 0,
+		encumbrance : .5,
+	},
+	
+	large:
+	{
+		damage : 1,
+		crit : -.5,
+		wieldiness : -.5,
+		penetration : .5,
+		bleed : 0,
+		stun : .5,
+		range : 0,
+		hits : 0,
+		encumbrance : -.5,
+	},
+	
+	great:
+	{
+		damage : 2,
+		crit : -1,
+		wieldiness : -1,
+		penetration : 1,
+		bleed : 0,
+		stun : 1,
+		range : 0,
+		hits : 0,
+		encumbrance : -1,
+	},
+	
+	dual:
+	{
+		damage : 0,
+		crit : 0,
+		wieldiness : -1,
+		penetration : 0,
+		bleed : 0,
+		stun : 0,
+		range : 0,
+		hits : 1,
+		encumbrance : -1,
+	},
+	
 // Shield -3 damage, -2 crit, +2 armor, +2 elemental protection
-// Great shield: +1 damage, +1 armor, +1 elemental protection (compared to shield)
-// Pole weapons: +1 range
-// Great weapons: +2 attack, -1 wieldiness
-// Thrown weapons -2 attack, long range, -1 wieldiness
-// Small weapons: -1 attack, +.5 crit
-// Very small weapons: -2 attack, +1 crit
-// Dual weapons -1 attack, +1 hit
-// TODO: Spreadsheet this, then derive stats
+// Great shield: +1 damage, +1 armor, +1 elemental protection (compared to shield)	
+
+}
+
+
 
 global.weapons =
 {
