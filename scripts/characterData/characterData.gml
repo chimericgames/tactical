@@ -94,6 +94,16 @@ global.passives =
 		name : "Pulverize",
 		description : "Attacks against stunned enemies ignore all armor.",
 	},
+	benediction :
+	{
+		name : "Benediction",
+		description : "Mana spent is converted to hitpoints healed for allies.",
+	},	
+	fateBinder :
+	{
+		name : "Fate Binder",
+		description : "Increases the chances that allies cling to conciousness when their hitpoints are depleted.",
+	},
 	
 }
 
@@ -112,6 +122,11 @@ global.adventurePassives =
 		description : "Reduces the effects of low morale and increases the effects of good morale.",	// Can reduce and increase always be 25%?
 	},
 
+	fateWeaver :
+	{
+		name : "Fate Weaver", 
+		description : "Increases the chances of favorable outcomes while adventuring.",
+	},
 
 }
 
@@ -132,6 +147,13 @@ global.items =
 		charges : infinity,
 		isBattleChoice : true,
 	},		
+	shatteredShackles :
+	{
+		name : "Shattered Shackles",
+		description : "",
+		charges : -1,
+		isBattleChoice : false,			
+	}
 	herbalBalm :
 	{
 		name : "Herbal Balm",
@@ -210,6 +232,20 @@ global.items =
 		charges : 2,
 		isBattleChoice : true,
 	},
+	runicTalisman :
+	{
+		name : "Runic Talisman",
+		description : "Gains a charge whenever its bearer takes their combat turn or takes non-physical damage. Adds spirit damage to the bearer's attacks, up to the number of charges",
+		charges : 0,
+		isBattleChoice : true,
+	},
+	greathartReigns :
+	{
+		name : "greathartReigns",
+		description : "Restores 1 hp per combat turn. Doubles the chances of clinging to conciousness once per battle.",
+		charges : -1,
+		isBattleChoice : false,
+	},	
 }	
 
 // Active abilities
@@ -218,73 +254,93 @@ global.battleChoices =
 	attack :
 	{
 		name: "Attack",
+		manaCost : 0,
 		description : "",
 	},
 	defend : 
 	{
 		name: "Defend",
+		manaCost : 0,
 		description : "",		
 	},	
 	weaponSwap :
 	{
 		name: "Swap Weapons",
+		manaCost : 0,
 		description : "",		
 	},	
 	position :
 	{
 		name: "Position",
+		manaCost : 0,
 		description : "",		
 	},	
 	retreat :
 	{
 		name: "Retreat",
+		manaCost : 0,
 		description : "",		
 	},	
 	none :
 	{
 		name: "None",
+		manaCost : 0,
 		description : "",		
 	},		
 	rally :
 	{
 		name: "Rally",
+		manaCost : 1,
 		description : "",		
 	},	
 	deadeye :
 	{
 		name: "Deadeye",
+		manaCost : 1,
 		description : "",		
 	},	
 	envenom :
 	{
 		name: "Envenom",
+		manaCost : 1,
 		description : "",		
 	},	
 	cryHavoc :
 	{
 		name: "Cry Havoc",
+		manaCost : 1,
 		description : "",		
 	},	
 	ignite :
 	{
 		name: "Ignite",
+		manaCost : 1,
 		description : "",		
 	},	
 	harry :
 	{
-		name : "Harry",	
+		name : "Harry",
+		manaCost : 1,
 		description : "",		
 	},
 	tailWind :
 	{
-		name : "Tail Wind",	
+		name : "Tail Wind",
+		manaCost : 1,
 		description : "",		
 	},	
 	batteringRam :
 	{
 		name : "Battering Ram",
+		manaCost : 0,
 		description : "Attacks with horns from the back row with increased chance to stun while changing position to the front row.",		
 	},
+	sanctuary :
+	{
+		name : "Sanctuary",
+		manaCost : 1,
+		description : "Prevents a quarter of elemental damage dealt to allies. Damage prevented in this way is reflected to foes with doubled damage.",
+	}
 }
 
 // Weapon properties to derive stats from
@@ -669,6 +725,19 @@ global.weapons =
 		elementalProtection : 3,
 	},	
 
+	greatShield : 
+	{
+		damage : 4,
+		range : Range.Short,
+		hits : 1,
+		damageType : DamageTypes.Crushing,
+		wieldiness : 0,
+		crit : -3,
+		armorProtection : 4,
+		elementalProtection : 4,
+	},	
+
+
 }
 
 calculateWeaponStats(global.weapons.fists);
@@ -913,6 +982,8 @@ global.characters =
 		//protects : [],
 	},
 	
+	// Shelve ceres in favor of a poison-oriented cervitaur friend for thistle
+	
 	thistle :
 	{
 		name : "Thistle",
@@ -921,7 +992,7 @@ global.characters =
 		size : Size.Normal,
 		weapon1 : global.weapons.thrownBlade,
 		weapon1Name : "Throwing Knives",
-		weapon2 : global.weapons.shortSwords,		
+		weapon2 : global.weapons.combatKnives,		
 		weapon2Name : "Kukri",
 		armor : global.armors.none,
 		armorName : "Sylvan Wrap",
@@ -1089,6 +1160,7 @@ global.characters =
 	},
 	
 	alkimos : // Berserker-poet satyr and lifelong friend of the harpy, Demi
+	// Notes: Or maybe they both escaped from servitude
 	{
 		name : "Alkimos",
 		race : "Satyr",
@@ -1108,7 +1180,7 @@ global.characters =
 		vitality : 5,
 		active : global.battleChoices.batteringRam,
 		passive : [ global.passives.berserker, global.passives.pulverize ],
-		items : [ global.items.wineSkin ],
+		items : [ global.items.wineSkin, global.items.shatteredShackles ],	// Alkimos' shackles are detrimental to technique and need to be removed by a smith
 		// Adventure skills
 		leadership : Skill.Decent,
 		scouting : Skill.Skilled,
@@ -1116,6 +1188,38 @@ global.characters =
 		cooking : Skill.Poor,
 		adventurePassive : [ global.adventurePassives.rousingVerse ],		
 		//protects : [ global.characters.demi ],
+	},
+
+	helle : // Megaloceros-mounted highland seidr worker
+	// Notes: Helle has a lot of unique powers granted by her loadout at the cost of having locked item slots combined with taking up 2 party slots
+	// Helle's unique shield restores mana by blocking nonphysical attacks
+	{
+		name : "Helle",
+		race : "Human",
+		alignment : Alignment.Friend,
+		size : Size.Large,
+		weapon1 : global.weapons.poleAxe, 
+		weapon1Name : "Crescent Poleaxe",
+		weapon2 : global.weapons.greatShield,
+		weapon2Name : "Bone-Charmed Greatshield",	// Unique
+		armor : global.armors.medium,
+		armorName : "Fateweaver's Regalia",
+		strength : 4,
+		spirit : 6,
+		endurance : 2,
+		technique : 4,
+		swiftness : 4,
+		vitality : 4,
+		active : global.battleChoices.sanctuary,
+		passive : [ global.passives.benediction, global.passives.fateBinder ],
+		items : [ global.items.runicTalisman, global.items.greathartReigns ],	// Her items are locked
+		// Adventure skills
+		leadership : Skill.Skilled,
+		scouting : Skill.Skilled,
+		huntingGathering : Skill.Skilled,
+		cooking : Skill.Skilled,
+		adventurePassive : [ global.passives.fateWeaver ],		
+		//protects : [  ],
 	},
 
 };
@@ -1208,7 +1312,7 @@ global.enemies =
 		weapon2 : global.weapons.piercingTeeth,
 		weapon2Name : "Piercing Teeth",
 		armor : global.armors.light,
-		armorName : "Feathered hide",
+		armorName : "",
 		strength : 6,
 		spirit : 2, 
 		endurance : 5,
