@@ -126,4 +126,16 @@ if global.debugMode
 	draw_text(turnOrderX,turnOrderY+ii*leading,"targetingPlayer: " + string(targetingPlayer)); ii++;
 	draw_text(turnOrderX,turnOrderY+ii*leading,"targetingEnemy: " + string(targetingEnemy)); ii++;
 	draw_text(turnOrderX,turnOrderY+ii*leading,"targetPositionEnemy: " + string(targetPositionEnemy)); ii++;
+	
+	var testWeapon = global.weapons.monsterWings;
+	draw_text(turnOrderX,turnOrderY+ii*leading,"test damage: " + string(testWeapon.damage)); ii++;
+	draw_text(turnOrderX,turnOrderY+ii*leading,"test crit: " + string(testWeapon.crit)); ii++;
+	draw_text(turnOrderX,turnOrderY+ii*leading,"test wieldiness: " + string(testWeapon.wieldiness)); ii++;
+	draw_text(turnOrderX,turnOrderY+ii*leading,"test penetration: " + string(testWeapon.penetration)); ii++;
+	draw_text(turnOrderX,turnOrderY+ii*leading,"test bleed: " + string(testWeapon.bleed)); ii++;
+	draw_text(turnOrderX,turnOrderY+ii*leading,"test stun: " + string(testWeapon.stun)); ii++;
+	draw_text(turnOrderX,turnOrderY+ii*leading,"test range: " + string(testWeapon.range)); ii++;
+	draw_text(turnOrderX,turnOrderY+ii*leading,"test hits: " + string(testWeapon.hits)); ii++;
+	draw_text(turnOrderX,turnOrderY+ii*leading,"test encumbrance: " + string(testWeapon.encumbrance)); ii++;
 }
+

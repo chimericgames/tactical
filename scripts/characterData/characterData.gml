@@ -73,7 +73,7 @@ global.passives =
 	{
 		name : "Herbalist",
 		description : "",
-	}
+	},
 	aerialist :
 	{
 		name : "Aerialist",
@@ -88,12 +88,12 @@ global.passives =
 	{
 		name : "Berserker",
 		description : "Damage taken converts endurance to strength, consuming mana, provided endurance exceeds 1.",
-	}		
+	},
 	pulverize :
 	{
 		name : "Pulverize",
 		description : "Attacks against stunned enemies ignore all armor.",
-	}		
+	},
 	
 }
 
@@ -104,13 +104,13 @@ global.adventurePassives =
 	{
 		name : "Overwatch", 
 		description : "While assigned to scouting, reduces the chances of being ambushed while increasing the chances of ambushing enemies.",
-	}
+	},
 	
 	rousingVerse :
 	{
 		name : "Rousing Verse", 
 		description : "Reduces the effects of low morale and increases the effects of good morale.",	// Can reduce and increase always be 25%?
-	}	
+	},
 
 
 }
@@ -202,14 +202,14 @@ global.items =
 		charges : -1,
 		isBattleChoice : false,		
 		
-	}
+	},
 	galeCharm :
 	{
 		name : "Gale Charm",
 		description : "Consume charge: Blasts the user to the rear position and deals light elemental damage to the enemy front row.",
 		charges : 2,
 		isBattleChoice : true,
-	}
+	},
 }	
 
 // Active abilities
@@ -282,7 +282,7 @@ global.battleChoices =
 	},	
 	batteringRam :
 	{
-		name : "Battering Ram"	
+		name : "Battering Ram",
 		description : "Attacks with horns from the back row with increased chance to stun while changing position to the front row.",		
 	},
 }
@@ -302,6 +302,8 @@ global.weaponProperties =
 		range : 0,
 		hits : 1,
 		encumbrance : -1,
+		armorProtection : 0,
+		elementalProtection : 0,		
 	},
 	
 	slashing:
@@ -315,6 +317,8 @@ global.weaponProperties =
 		range : 0,
 		hits : 0,
 		encumbrance : 0,
+		armorProtection : 0,
+		elementalProtection : 0,			
 	},
 
 	piercing:
@@ -328,6 +332,8 @@ global.weaponProperties =
 		range : 0,
 		hits : 0,
 		encumbrance : 0,
+		armorProtection : 0,
+		elementalProtection : 0,			
 	},
 	
 	splitting:
@@ -341,6 +347,8 @@ global.weaponProperties =
 		range : 0,
 		hits : 0,
 		encumbrance : 0,
+		armorProtection : 0,
+		elementalProtection : 0,			
 	},
 	
 	crushing:
@@ -354,6 +362,8 @@ global.weaponProperties =
 		range : 0,
 		hits : 0,
 		encumbrance : 0,
+		armorProtection : 0,
+		elementalProtection : 0,			
 	},
 	
 	pole:
@@ -367,6 +377,8 @@ global.weaponProperties =
 		range : 1,
 		hits : 0,
 		encumbrance : -.5,
+		armorProtection : 0,
+		elementalProtection : 0,			
 	},
 	
 	thrownLight:
@@ -380,6 +392,8 @@ global.weaponProperties =
 		range : 2,
 		hits : 0,
 		encumbrance : 0,
+		armorProtection : 0,
+		elementalProtection : 0,			
 	},
 	
 	thrownHeavy:
@@ -393,6 +407,8 @@ global.weaponProperties =
 		range : 2,
 		hits : 0,
 		encumbrance : -.5,
+		armorProtection : 0,
+		elementalProtection : 0,			
 	},
 	
 	missile:
@@ -406,6 +422,8 @@ global.weaponProperties =
 		range : 2,
 		hits : 0,
 		encumbrance : -.5,
+		armorProtection : 0,
+		elementalProtection : 0,			
 	},
 
 	verySmall:
@@ -419,6 +437,8 @@ global.weaponProperties =
 		range : 0,
 		hits : 0,
 		encumbrance : 1,
+		armorProtection : 0,
+		elementalProtection : 0,			
 	},
 	
 	small:
@@ -432,6 +452,8 @@ global.weaponProperties =
 		range : 0,
 		hits : 0,
 		encumbrance : .5,
+		armorProtection : 0,
+		elementalProtection : 0,			
 	},
 	
 	large:
@@ -445,6 +467,8 @@ global.weaponProperties =
 		range : 0,
 		hits : 0,
 		encumbrance : -.5,
+		armorProtection : 0,
+		elementalProtection : 0,			
 	},
 	
 	great:
@@ -458,6 +482,8 @@ global.weaponProperties =
 		range : 0,
 		hits : 0,
 		encumbrance : -1,
+		armorProtection : 0,
+		elementalProtection : 0,			
 	},
 	
 	dual:
@@ -471,7 +497,24 @@ global.weaponProperties =
 		range : 0,
 		hits : 1,
 		encumbrance : -1,
+		armorProtection : 0,
+		elementalProtection : 0,			
 	},
+	
+	flesh:
+	{
+		damage : -2,
+		crit : 0,
+		wieldiness : 0,
+		penetration : 0,
+		bleed : 0,
+		stun : 0,
+		range : 0,
+		hits : 0,
+		encumbrance : 1,
+		armorProtection : 0,
+		elementalProtection : 0,			
+	},	
 	
 // Shield -3 damage, -2 crit, +2 armor, +2 elemental protection
 // Great shield: +1 damage, +1 armor, +1 elemental protection (compared to shield)	
@@ -479,264 +522,179 @@ global.weaponProperties =
 }
 
 
-
 global.weapons =
 {
+	
 	fists :
 	{
-		attack : 0,
-		range : Range.Short,
-		hits : 2,
-		damageType : DamageTypes.Crushing,
-		wieldiness : 0,
-		bleed : 0,
-		penetration : 0,
-		critModifier : 0,
-		armorProtection : 0,
-		elementalProtection : 0
+		tags : [ global.weaponProperties.crushing, global.weaponProperties.dual, global.weaponProperties.verySmall, global.weaponProperties.flesh ],
 	},
 	
 	piercingTeeth :
 	{
-		attack : 4,
-		range : Range.Short,
-		hits : 1,
-		damageType : DamageTypes.Piercing,
-		wieldiness : 1,
-		critModifier : 1,
-		armorProtection : 0,
-		elementalProtection : 0
+		tags : [ global.weaponProperties.piercing, global.weaponProperties.small ],
 	},	
 	
 	terribleClaws :
 	{
-		attack : 2,
-		range : Range.Short,
-		hits : 2,
-		damageType : DamageTypes.Slashing,
-		wieldiness : .5,
-		critModifier : 1,
-		armorProtection : 0,
-		elementalProtection : 0
+		tags : [ global.weaponProperties.slashing, global.weaponProperties.dual, global.weaponProperties.verySmall ],
 	},	
 	
-	greatWings :
+	monsterWings :
 	{
-		attack : 2,
-		range : Range.Medium,
-		hits : 1,
-		damageType : DamageTypes.Crushing,
-		wieldiness : 0,
-		critModifier : -1,
-		armorProtection : 0,
-		elementalProtection : 0
+		tags : [ global.weaponProperties.crushing, global.weaponProperties.flesh, global.weaponProperties.large ],
 	},
 
 	monsterHorns :
 	{
-		attack : 4,
-		range : Range.Medium,
-		hits : 1,
-		damageType : DamageTypes.Crushing,
-		wieldiness : 0,
-		critModifier : -1,
-		armorProtection : 0,
-		elementalProtection : 0
+		tags : [ global.weaponProperties.crushing ],
 	},
 
 	sword :
 	{
-		attack : 4,
-		range : Range.Short,
-		hits : 1,
-		damageType : DamageTypes.Slashing,
-		wieldiness : .5,
-		critModifier : 0,
-		armorProtection : 0,
-		elementalProtection : 0
+		tags : [ global.weaponProperties.slashing ],
 	},
+	
+	longsword :
+	{
+		tags : [ global.weaponProperties.slashing, global.weaponProperties.large ],
+	},	
 
 	spear :
 	{
-		attack : 4,
-		range : Range.Medium,
-		hits : 1,
-		damageType : DamageTypes.Piercing,
-		wieldiness : 1,
-		critModifier : .5,
-		armorProtection : 1,
-		elementalProtection : 0
+		tags : [ global.weaponProperties.piercing, global.weaponProperties.pole ],
 	},
 	
 	axe :
 	{
-		attack : 5,
-		range : Range.Short,
-		hits : 1,
-		damageType : DamageTypes.Splitting,
-		wieldiness : -1,
-		critModifier : 0,
-		armorProtection : 0,
-		elementalProtection : 0
+		tags : [ global.weaponProperties.splitting ],
 	},	
 	
+	poleAxe :
+	{
+		tags : [ global.weaponProperties.splitting, global.weaponProperties.pole, global.weaponProperties.large ],
+	},		
+	
+	mace :
+	{
+		tags : [ global.weaponProperties.crushing ],
+	},		
+		
+	eztli : // Eztli is a trained microraptor
+	{
+		tags : [ global.weaponProperties.slashing, global.weaponProperties.dual, global.weaponProperties.verySmall, global.weaponProperties.missile],
+	},	
+	
+	shortbow : 
+	{
+		tags : [ global.weaponProperties.piercing, global.weaponProperties.missile, global.weaponProperties.small ],
+	},		
+
+	recurveBow : 
+	{
+		tags : [ global.weaponProperties.piercing, global.weaponProperties.missile ],
+	},
+
+	longbow : 
+	{
+		tags : [ global.weaponProperties.piercing, global.weaponProperties.missile, global.weaponProperties.large ],
+	},
+	
+	greatBow :
+	{
+		tags : [ global.weaponProperties.piercing, global.weaponProperties.missile, global.weaponProperties.great ],
+	},		
+	
+	greatSword : 
+	{
+		tags : [ global.weaponProperties.slashing, global.weaponProperties.great ],
+	},
+	
+	greatMace : 
+	{
+		tags : [ global.weaponProperties.crushing, global.weaponProperties.great ],
+	},	
+	
+	greatAxe : 
+	{
+		tags : [ global.weaponProperties.splitting, global.weaponProperties.great ],
+	},	
+	
+	shortSwords : 
+	{
+		tags : [ global.weaponProperties.slashing, global.weaponProperties.dual, global.weaponProperties.small ],
+	},	
+	
+	dagger : 
+	{
+		tags : [ global.weaponProperties.piercing, global.weaponProperties.verySmall ],
+	},
+	
+	combatKnives : 
+	{
+		tags : [ global.weaponProperties.slashing, global.weaponProperties.dual, global.weaponProperties.verySmall ],
+	},		
+	
+	thrownBlade : 
+	{
+		tags : [ global.weaponProperties.piercing, global.weaponProperties.verySmall, global.weaponProperties.thrownLight ],
+	},
+	
+	thrownAxe : 
+	{
+		tags : [ global.weaponProperties.splitting, global.weaponProperties.small, global.weaponProperties.thrownHeavy ],
+	},	
+
 	mediumShield : 
 	{
-		attack : 1,
+		damage : 1,
 		range : Range.Short,
 		hits : 1,
 		damageType : DamageTypes.Crushing,
 		wieldiness : 0,
-		critModifier : -2,
+		crit : -2,
 		armorProtection : 2,
 		elementalProtection : 2
 	},		
 	
 	largeShield : 
 	{
-		attack : 2,
+		damage : 2,
 		range : Range.Short,
 		hits : 1,
 		damageType : DamageTypes.Crushing,
 		wieldiness : 0,
-		critModifier : -2,
+		crit : -2,
 		armorProtection : 3,
 		elementalProtection : 3,
 	},	
-	
-	eztli : // Eztli is a trained microraptor
-	{
-		attack : 2,
-		range : Range.Long,
-		hits : 2,
-		damageType : DamageTypes.Piercing,
-		wieldiness : 1,
-		critModifier : 1,		
-		armorProtection : 0,
-		elementalProtection : 0,
-	},
-	
-	shortbow : 
-	{
-		attack : 3,
-		range : Range.Long,
-		hits : 1,
-		damageType : DamageTypes.Piercing,
-		wieldiness : 1,
-		critModifier : 1,		
-		armorProtection : 0,
-		elementalProtection : 0,
-	},		
-
-	longbow : 
-	{
-		attack : 4,
-		range : Range.Long,
-		hits : 1,
-		damageType : DamageTypes.Piercing,
-		wieldiness : 1,
-		critModifier : .5,		
-		armorProtection : 0,
-		elementalProtection : 0,
-	},
-	
-	greatBow :
-	{
-		attack : 6,
-		range : Range.Long,
-		hits : 1,
-		damageType : DamageTypes.Piercing,
-		wieldiness : 0,
-		critModifier : .5,		
-		armorProtection : 0,
-		elementalProtection : 0,
-	},		
-	
-	greatSword : 
-	{
-		attack : 6,
-		range : Range.Short,
-		hits : 1,
-		damageType : DamageTypes.Slashing,
-		wieldiness : -.5,
-		critModifier : 0,		
-		armorProtection : 1,
-		elementalProtection : 0,
-	},
-	
-	greatBlunt : 
-	{
-		attack : 6,
-		range : Range.Short,
-		hits : 1,
-		damageType : DamageTypes.Crushing,
-		wieldiness : -1,
-		critModifier : -1,
-		armorProtection : 0,
-		elementalProtection : 0,
-	},	
-	
-	greatAxe : 
-	{
-		attack : 7,
-		range : Range.Short,
-		hits : 1,
-		damageType : DamageTypes.Splitting,
-		wieldiness : -2,
-		critModifier : 0,		
-		armorProtection : 1,
-		elementalProtection : 0,
-	},	
-	
-	shortSwords : 
-	{
-		attack : 2,
-		range : Range.Short,
-		hits : 2,
-		damageType : DamageTypes.Slashing,
-		wieldiness : .5,
-		critModifier : 1,		
-		armorProtection : 0,
-		elementalProtection : 0,
-	},	
-	
-	dagger : 
-	{
-		attack : 1,
-		range : Range.Short,
-		hits : 2,
-		damageType : DamageTypes.Piercing,
-		wieldiness : 1,
-		critModifier : 1.5,				
-		armorProtection : 0,
-		elementalProtection : 0,
-	},
-	
-	combatKnife : 
-	{
-		attack : 1,
-		range : Range.Short,
-		hits : 2,
-		damageType : DamageTypes.Slashing,
-		wieldiness : .5,
-		critModifier : 1,				
-		armorProtection : 0,
-		elementalProtection : 0,
-	},		
-	
-	thrownBlade : 
-	{
-		attack : 1,
-		range : Range.Long,
-		hits : 1,
-		damageType : DamageTypes.Piercing,
-		wieldiness : -1,
-		critModifier : 1.5,		
-		armorProtection : 0,
-		elementalProtection : 0,
-	},			
 
 }
+
+calculateWeaponStats(global.weapons.fists);
+calculateWeaponStats(global.weapons.piercingTeeth);
+calculateWeaponStats(global.weapons.terribleClaws);
+calculateWeaponStats(global.weapons.monsterWings);
+calculateWeaponStats(global.weapons.monsterHorns);
+calculateWeaponStats(global.weapons.sword);
+calculateWeaponStats(global.weapons.longsword);
+calculateWeaponStats(global.weapons.spear);
+calculateWeaponStats(global.weapons.axe);
+calculateWeaponStats(global.weapons.poleAxe);
+calculateWeaponStats(global.weapons.mace);
+calculateWeaponStats(global.weapons.eztli);
+calculateWeaponStats(global.weapons.shortbow);
+calculateWeaponStats(global.weapons.recurveBow);
+calculateWeaponStats(global.weapons.longbow);
+calculateWeaponStats(global.weapons.greatBow);
+calculateWeaponStats(global.weapons.greatSword);
+calculateWeaponStats(global.weapons.greatMace);
+calculateWeaponStats(global.weapons.greatAxe);
+calculateWeaponStats(global.weapons.shortSwords);
+calculateWeaponStats(global.weapons.dagger);
+calculateWeaponStats(global.weapons.combatKnives);
+calculateWeaponStats(global.weapons.thrownBlade);
+calculateWeaponStats(global.weapons.thrownAxe);
 
 // Armors
 global.armors =
@@ -779,7 +737,7 @@ global.armors =
 		armorProtection : 4,
 		elementalProtection : 1,
 		evasionBonus : 0,
-	}
+	},
 	
 	monsterArmorEvasion :
 	{
@@ -790,6 +748,106 @@ global.armors =
 	},
 	
 }		
+
+
+function calculateWeaponStats(weaponName)
+{
+	var weapon = weaponName;
+	var weaponTags = array_length(weapon.tags);
+	
+	// Damage
+	weapon.damage = global.weaponProperties.base.damage;
+	for (var i = 0; i < weaponTags; ++i) 
+	{
+		var weaponProperty = weapon.tags[i];
+		weapon.damage += weaponProperty.damage;
+		weapon.damage = max(weapon.damage, 0);
+	}
+	
+	// Crit
+	weapon.crit = global.weaponProperties.base.crit;
+	for (var i = 0; i < weaponTags; ++i) 
+	{
+		var weaponProperty = weapon.tags[i];
+		weapon.crit += weaponProperty.crit;
+	}
+	
+	// Wieldiness
+	weapon.wieldiness = global.weaponProperties.base.wieldiness;
+	for (var i = 0; i < weaponTags; ++i) 
+	{
+		var weaponProperty = weapon.tags[i];
+		weapon.wieldiness += weaponProperty.wieldiness;
+	}	
+	
+	// Penetration
+	weapon.penetration = global.weaponProperties.base.penetration;
+	for (var i = 0; i < weaponTags; ++i) 
+	{
+		var weaponProperty = weapon.tags[i];
+		weapon.penetration += weaponProperty.penetration;
+	}
+	
+	// Bleed
+	weapon.bleed = global.weaponProperties.base.bleed;
+	for (var i = 0; i < weaponTags; ++i) 
+	{
+		var weaponProperty = weapon.tags[i];
+		weapon.bleed += weaponProperty.bleed;
+	}		
+		
+	// Stun
+	weapon.stun = global.weaponProperties.base.stun;
+	for (var i = 0; i < weaponTags; ++i) 
+	{
+		var weaponProperty = weapon.tags[i];
+		weapon.stun += weaponProperty.stun;
+	}
+	
+	// Range
+	weapon.range = global.weaponProperties.base.range;
+	for (var i = 0; i < weaponTags; ++i) 
+	{
+		var weaponProperty = weapon.tags[i];
+		weapon.range += weaponProperty.range;
+	}	
+	
+	// Hits
+	weapon.hits = global.weaponProperties.base.hits;
+	for (var i = 0; i < weaponTags; ++i) 
+	{
+		var weaponProperty = weapon.tags[i];
+		weapon.hits += weaponProperty.hits;
+	}	
+	
+	// Encumbrance
+	weapon.encumbrance = global.weaponProperties.base.encumbrance;
+	for (var i = 0; i < weaponTags; ++i) 
+	{
+		var weaponProperty = weapon.tags[i];
+		weapon.encumbrance += weaponProperty.encumbrance;
+	}
+	
+	// Armor Protection
+	weapon.armorProtection = global.weaponProperties.base.armorProtection;
+	for (var i = 0; i < weaponTags; ++i) 
+	{
+		var weaponProperty = weapon.tags[i];
+		weapon.armorProtection += weaponProperty.armorProtection;
+	}
+	
+	// Elemental Protection
+	weapon.elementalProtection = global.weaponProperties.base.elementalProtection;
+	for (var i = 0; i < weaponTags; ++i) 
+	{
+		var weaponProperty = weapon.tags[i];
+		weapon.elementalProtection += weaponProperty.elementalProtection;
+	}	
+	
+}
+
+calculateWeaponStats(global.weapons.greatAxe);
+
 
 // Characters
 global.characters =
@@ -822,7 +880,7 @@ global.characters =
 		huntingGathering : Skill.Decent,
 		cooking : Skill.Decent,
 		adventurePassive : [],
-		protects : [],
+		//protects : [],
 	},
 	
 	ceres :
@@ -833,7 +891,7 @@ global.characters =
 		size : Size.Large,
 		weapon1 : global.weapons.greatBow,
 		weapon1Name : "Great Bow",
-		weapon2 : global.weapons.greatBlunt,
+		weapon2 : global.weapons.greatMace,
 		weapon2Name : "Great Flail",
 		armor : global.armors.light,
 		armorName : "Stalker's Leathers",
@@ -852,7 +910,7 @@ global.characters =
 		huntingGathering : Skill.Skilled,
 		cooking : Skill.Decent,
 		adventurePassive : [],
-		protects : [],
+		//protects : [],
 	},
 	
 	thistle :
@@ -882,7 +940,7 @@ global.characters =
 		huntingGathering : Skill.Skilled,
 		cooking : Skill.Decent,
 		adventurePassive : [],		
-		protects : [],
+		//protects : [],
 	},
 	
 	cassiel :
@@ -912,7 +970,7 @@ global.characters =
 		huntingGathering : Skill.Poor,
 		cooking : Skill.Skilled,
 		adventurePassive : [],
-		protects : [],
+		//protects : [],
 	},	
 	
 	citalli :
@@ -942,7 +1000,7 @@ global.characters =
 		huntingGathering : Skill.Masterful,
 		cooking : Skill.Poor,
 		adventurePassive : [],		
-		protects : [ global.characters.acatl ],
+		//protects : [ global.characters.acatl ],
 	},		
 	
 	acatl :
@@ -972,7 +1030,7 @@ global.characters =
 		huntingGathering : Skill.Skilled,
 		cooking : Skill.Masterful,
 		adventurePassive : [],
-		protects : [], // His pet
+		//protects : [], // His pet
 	},
 	
 	/* I need a monster for Acatl
@@ -1008,7 +1066,7 @@ global.characters =
 		size : Size.Normal,
 		weapon1 : global.weapons.terribleClaws,
 		weapon1Name : "Hooked Talons",
-		weapon2 : global.weapons.greatWings,
+		weapon2 : global.weapons.monsterWings,
 		weapon2Name : "Avian Wings",
 		armor : global.armors.monsterArmorEvasion,
 		armorName : "Dazzling Plumage",
@@ -1027,7 +1085,7 @@ global.characters =
 		huntingGathering : Skill.Skilled,
 		cooking : Skill.Catastrophic,
 		adventurePassive : [ global.adventurePassives.overwatch ],
-		protects : [ global.characters.alkimos ],
+		//protects : [ global.characters.alkimos ],
 	},
 	
 	alkimos : // Berserker-poet satyr and lifelong friend of the harpy, Demi
@@ -1057,7 +1115,7 @@ global.characters =
 		huntingGathering : Skill.Skilled,
 		cooking : Skill.Poor,
 		adventurePassive : [ global.adventurePassives.rousingVerse ],		
-		protects : [ global.characters.demi ],
+		//protects : [ global.characters.demi ],
 	},
 
 };

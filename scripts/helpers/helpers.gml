@@ -52,9 +52,9 @@ function swapWeapons(character = noone)
 function calculateAttack(character = noone)
 {
 	if character.equippedWeapon == 1
-		var weaponAttack = character.weapon1.attack;
+		var weaponAttack = character.weapon1.damage;
 	else if character.equippedWeapon == 2
-		var weaponAttack = character.weapon2.attack;
+		var weaponAttack = character.weapon2.damage;
 	return (character.strength*character.size+weaponAttack)*3;
 }
 
@@ -70,9 +70,9 @@ function calculateWeaponHits(character = noone)
 function calculateCritChance(character = noone)
 {
 	if character.equippedWeapon == 1
-		var weaponCritModifier = character.weapon1.critModifier;
+		var weaponCritModifier = character.weapon1.crit;
 	else if character.equippedWeapon == 2
-		var weaponCritModifier = character.weapon2.critModifier;
+		var weaponCritModifier = character.weapon2.crit;
 	return clamp(power(character.technique+weaponCritModifier,1.5)*.0125,0,1)*100;
 }
 
