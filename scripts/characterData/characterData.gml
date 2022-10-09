@@ -104,7 +104,16 @@ global.passives =
 		name : "Fate Binder",
 		description : "Increases the chances that allies cling to conciousness when their hitpoints are depleted.",
 	},
-	
+	herosJourney :
+	{
+		name : "Hero's Journey",
+		description : "Receives double the benefits from training.",
+	},	
+	ironResolve :
+	{
+		name : "Iron Resolve",
+		description : "Gains 'Inspired' after resisting being downed. Attack and defense is increased for each downed ally.",
+	},		
 }
 
 global.adventurePassives =
@@ -113,13 +122,13 @@ global.adventurePassives =
 	overwatch :
 	{
 		name : "Overwatch", 
-		description : "While assigned to scouting, reduces the chances of being ambushed while increasing the chances of ambushing enemies.",
+		description : "Reduces the chances of being ambushed while increasing the chances of ambushing enemies while scouting.",
 	},
 	
 	rousingVerse :
 	{
 		name : "Rousing Verse", 
-		description : "Reduces the effects of low morale and increases the effects of good morale.",	// Can reduce and increase always be 25%?
+		description : "Reduces the effects of low morale and increases the effects of good morale while leading.",	// Can reduce and increase always be 25%?
 	},
 
 	fateWeaver :
@@ -127,6 +136,12 @@ global.adventurePassives =
 		name : "Fate Weaver", 
 		description : "Increases the chances of favorable outcomes while adventuring.",
 	},
+	
+	inspirational :
+	{
+		name : "Inspirational", 
+		description : "Increases party morale and chance to resist being downed while leading",
+	},	
 
 }
 
@@ -153,7 +168,7 @@ global.items =
 		description : "",
 		charges : -1,
 		isBattleChoice : false,			
-	}
+	},
 	herbalBalm :
 	{
 		name : "Herbal Balm",
@@ -242,10 +257,10 @@ global.items =
 	greathartReigns :
 	{
 		name : "greathartReigns",
-		description : "Restores 1 hp per combat turn. Doubles the chances of clinging to conciousness once per battle.",
+		description : "Restores 1 hp per combat turn. Doubles the chances of resisting being downed once per battle.",
 		charges : -1,
 		isBattleChoice : false,
-	},	
+	},
 }	
 
 // Active abilities
@@ -340,6 +355,12 @@ global.battleChoices =
 		name : "Sanctuary",
 		manaCost : 1,
 		description : "Prevents a quarter of elemental damage dealt to allies. Damage prevented in this way is reflected to foes with doubled damage.",
+	}
+	lashOut :
+	{
+		name : "Lash Out",	
+		manaCost : 1,
+		description : "A desperate attack that adds random damage up to the attacker's missing hitpoints.",
 	}
 }
 
@@ -570,6 +591,21 @@ global.weaponProperties =
 		encumbrance : 1,
 		armorProtection : 0,
 		elementalProtection : 0,			
+	},
+	
+	disabling:
+	{
+		damage : -1,
+		crit : -1,
+		wieldiness : 0,
+		penetration : 0,
+		bleed : 0,
+		stun : 1.5,
+		range : 0,
+		hits : 0,
+		encumbrance : 0,
+		armorProtection : 0,
+		elementalProtection : 0,			
 	},	
 	
 // Shield -3 damage, -2 crit, +2 armor, +2 elemental protection
@@ -701,6 +737,11 @@ global.weapons =
 		tags : [ global.weaponProperties.splitting, global.weaponProperties.small, global.weaponProperties.thrownHeavy ],
 	},	
 
+	bolas : 
+	{
+		tags : [ global.weaponProperties.crushing, global.weaponProperties.small, global.weaponProperties.thrownLight, global.weaponProperties.disabling ],
+	},	
+
 	mediumShield : 
 	{
 		damage : 1,
@@ -764,6 +805,7 @@ calculateWeaponStats(global.weapons.dagger);
 calculateWeaponStats(global.weapons.combatKnives);
 calculateWeaponStats(global.weapons.thrownBlade);
 calculateWeaponStats(global.weapons.thrownAxe);
+calculateWeaponStats(global.weapons.bolas);
 
 // Armors
 global.armors =
@@ -1218,14 +1260,44 @@ global.characters =
 		scouting : Skill.Skilled,
 		huntingGathering : Skill.Skilled,
 		cooking : Skill.Skilled,
-		adventurePassive : [ global.passives.fateWeaver ],		
+		adventurePassive : [ global.adventurePassives.fateWeaver ],		
+		//protects : [  ],
+	},
+
+	ilse :
+	{
+		name : "Ilse",
+		race : "Human",
+		alignment : Alignment.Friend,
+		size : Size.Normal,
+		weapon1 : global.weapons.longsword, 
+		weapon1Name : "Heirloom Longsword, 'Fable'",
+		weapon2 : global.weapons.bolas,
+		weapon2Name : "Braided Bolas",
+		armor : global.armors.light,
+		armorName : "Reinforced Fur-Lined Coat",
+		strength : 2,
+		spirit : 3,
+		endurance : 3,
+		technique : 2,
+		swiftness : 3,
+		vitality : 3,
+		active : global.battleChoices.lashOut,
+		passive : [ global.passives.herosJourney, global.passives.ironResolve ],
+		items : [  ],
+		// Adventure skills
+		leadership : Skill.Skilled,
+		scouting : Skill.Decent,
+		huntingGathering : Skill.Poor,
+		cooking : Skill.Poor,
+		adventurePassive : [ global.adventurePassives.inspirational ],		
 		//protects : [  ],
 	},
 
 };
 
 // Create a list of characters
-global.characterList = [ global.characters.sigrid, global.characters.ceres, global.characters.thistle, global.characters.cassiel, global.characters.citalli, global.characters.acatl, global.characters.demi, global.characters.alkimos ];
+global.characterList = [ global.characters.sigrid, global.characters.ceres, global.characters.thistle, global.characters.cassiel, global.characters.citalli, global.characters.acatl, global.characters.demi, global.characters.alkimos, global.characters.helle, global.characters.ilse ];
 global.characterCount = array_length(global.characterList);
 
 // Enemies
