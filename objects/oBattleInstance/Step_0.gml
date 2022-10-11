@@ -7,21 +7,80 @@ if actionCountdown > 0
 if global.gameOver
 	exit;
 
-// First turn: If the unit is an enemy, attack a random player character. If the active unit is a player, create the battle menu and give control.
-turnCount = 1 && !turnInitialized
+// First turn: If the unit is an enemy, target a random player character. If the active unit is a player, create the battle menu and give control.
+if !firstTurnInitialized
 {
 	if !enemyTurn()
-	{
-		playerTurn = true;
 		populateBattleChoices();
+	firstTurnInitialized = true;
+}
+
+// Combat! Play out queued actions
+if battleStart
+{
+	// Bail on combat if one unit remains
+	var turnOrderCount = array_length(turnOrder);
+	if turnOrderCount <= 1
+	{
+		log("Combat over: One unit remains.");
+		exit;
 	}
-	turnInitialized = true;
+	
+	var unit = actionQueue[battleIndex,0];
+	
+	if unit.concious
+	{
+		var battleAction = actionQueue[battleIndex,1];
+		switch(battleAction)
+		{
+			case "Attack": 
+			var targetEnemy = actionQueue[battleIndex,2]; //getTarget(activeCharacter); // TODO: Deal with missing, moved, or KO'd units
+		
+			if targetEnemy != noone
+			{
+				attackTarget(unit, targetEnemy);
+				log("");
+				actionCountdown = global.actionDelay;	
+			}	
+			break;
+		}
+	}
+	else
+	{
+		log("Unit is unconcious.");
+		actionCountdown = 1;
+	}
+	
+	// Advance to the next unit in the action queue
+	battleIndex ++;
+	
+	// If we've reached the end, start a new round
+	if battleIndex >= array_length(actionQueue)
+	{
+		battleStart = false;
+		
+		// Clear the action queue and turn order and create a new one
+		turnIndex = 0;
+		actionQueue = [];
+		turnOrder = [];		
+		determineTurnOrder(global.partyList);
+		determineTurnOrder(enemyPartyList);
+		
+		// Find next active unit
+		var unit = (turnIndex);
+		activeCharacter = turnOrder[unit];
+		firstTurnInitialized = false;
+		
+		log("");
+		log("NEW ROUND.");
+		log("");
+	}
 }
 
 if !playerTurn
 	exit;
 
-// Input control
+// Action select & input control
 
 // Mouseover menu
 // TODO: Refactor this with a helper function
@@ -79,7 +138,7 @@ if battleChoicesAvailable
 {
 	if mouse_check_button_pressed(mb_left) && mousePos != -1
 	{
-	
+		
 		var turnOrderCount = array_length(turnOrder);
 		if turnOrderCount <= 1
 		{
@@ -91,30 +150,35 @@ if battleChoicesAvailable
 		switch(battleChoice.name)
 		{
 			case "Attack": 
-				var targetEnemy = getTarget(activeCharacter); // TODO: Replace this with manual targeting
-				// Targeting an enemy or...
-				// Auto attacking
+				var targetEnemy = getTarget(activeCharacter);
 				if targetingEnemy != true
 				{
 					activeEnemy = targetEnemy;
 					if targetEnemy != noone
-						attackTarget(activeCharacter, targetEnemy); 
+					{
+						queueAction("Attack", targetEnemy);
+					}
 					else		
 						exit;
-					actionCountdown = global.actionDelay;
-					advanceTurn(); 
+					actionCountdown = global.menuDelay;
+					advanceTurn();
 				}	
 				break;
 			case "Defend":
 				log(string(activeCharacter.name) + " takes a defensive stance...");
 				activeCharacter.defending = true;
-				actionCountdown = global.actionDelay;
-				advanceTurn(); 				
+				queueAction("Defend");
+				actionCountdown = global.menuDelay;
+				advanceTurn();
 				break;
-			case "Swap Weapons": swapWeapons(activeCharacter); 
+			case "Swap Weapons": 
+				swapWeapons(activeCharacter);	// Currently this does not end the turn
 				break;
 			case "Position": 
 				changePositions(activeCharacter, true);
+				queueAction("Position");
+				actionCountdown = global.menuDelay;
+				advanceTurn();
 				break;
 			case "Retreat":
 				break;
@@ -122,14 +186,15 @@ if battleChoicesAvailable
 	}
 }
 
-// Manual enemy targeting
+// Manual enemy attack targeting
 else if targetingEnemy
 {
 	if mouse_check_button_pressed(mb_left) && battleChoice.name == "Attack" && targetPositionEnemy != -1
 	{
 		var targetEnemy = enemyPositions[targetPositionEnemy];
-		attackTarget(activeCharacter, targetEnemy);
-		actionCountdown = global.actionDelay;
+		//attackTarget(activeCharacter, targetEnemy);
+		queueAction("Attack", targetEnemy);
+		actionCountdown = global.menuDelay;
 		advanceTurn(); 		
 	}	
 }

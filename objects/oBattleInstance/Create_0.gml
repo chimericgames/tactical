@@ -1,6 +1,7 @@
 // Battle menu GUI
 
-global.debugMode = true;
+global.debugMode = false;
+displayUnitStats = true;
 
 menuX = 20;
 menuY = 20;
@@ -14,7 +15,8 @@ selectUnitBoxHeight = leading * 2;
 battleChoices = [];
 battleChoice = "";
 battleChoicesAvailable = true;
-displayUnitStats = false;
+battleStart = false;
+battleIndex = 0;
 displayUnits = true;
 targetingPlayer = false;
 targetingEnemy = false;
@@ -22,10 +24,11 @@ targetPositionEnemy = -1;
 targetPositionPlayer = -1;
 
 // Turn data
-turnInitialized = false;
+firstTurnInitialized = false;
 turnCount = 1;
 turnIndex = 0;
 turnOrder = [];
+actionQueue = [];
 playerTurn = false;
 actionCountdown = global.initialActionDelay;
 
@@ -40,7 +43,7 @@ array_push(enemyPartyList, instantiateUnit("palegrovePoacher", global.enemies));
 
 // Enemies
 // Assign each unit to a position
-enemyPositions = [];
+enemyPositions=[];
 addUnitToPosition(noone, 0, enemyPositions);
 addUnitToPosition(enemyPartyList[0], 1, enemyPositions);
 addUnitToPosition(enemyPartyList[1], 2, enemyPositions);

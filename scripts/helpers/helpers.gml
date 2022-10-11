@@ -361,6 +361,18 @@ function checkUnitKO(unit)
 				return true;
 			}
 		}
+		/*
+		// Remove the KO'd unit from the the action queue	
+		var actionQueueCount = array_length(actionQueue);
+		for (var i=0; i<actionQueueCount; i++) 
+		{					
+			if actionQueue[i,0] == unit
+			{
+				array_delete(actionQueue,i,1);
+				return true;
+			}
+		}
+		*/
 	}	
 	return false;
 }
@@ -402,8 +414,23 @@ function advanceTurn()
 	turnCount ++;
 	turnIndex ++;
 	
+	// Once all units have chosen actions begin the battle
+	if turnIndex >= turnOrderCount
+	{
+		
+		// Start the battle!
+		battleStart = true;
+		battleIndex = 0;
+		
+		log("");
+		log("COMBAT START.");
+		log("");
+		
+		exit;
+	}	
+	
 	// Find next active unit
-	var unit = (turnIndex) mod turnOrderCount;
+	var unit = (turnIndex);
 	activeCharacter = turnOrder[unit];
 	
 	// Reset the character
@@ -412,9 +439,18 @@ function advanceTurn()
 	log("");
 	log("Turn advanced. " + string(activeCharacter.name) + "'s turn.");
 	
-	// If unit is a player, create the battle menu. If the unit is an enemy, attack a random player character
+	// If unit is a player, create the battle menu.
 	if !enemyTurn()
 		populateBattleChoices();
+}
+
+// Queue up combat actions
+function queueAction(action = "Attack", target = noone)
+{
+	actionQueue[turnIndex, 0] = activeCharacter;
+	actionQueue[turnIndex, 1] = action;
+	if target != noone
+		actionQueue[turnIndex, 2] = target;
 }
 
 // Targeting logic
@@ -536,16 +572,22 @@ function enemyTurn(unit = activeCharacter)
 				swapWeapons(unit); 
 				//log(string(unit.name) + " switches weapons.");			
 			}	
-			attackTarget(unit, targetEnemy);
+			
+			//attackTarget(unit, targetEnemy);
+			queueAction("Attack", targetEnemy);
+			
 			// Advance the turn
-			actionCountdown = global.actionDelay;
+			actionCountdown = global.menuDelay;
 			advanceTurn();
 			return 1;			
 		}
+		else
+			queueAction("None");
 		
 		// No player targets. Game Over!
 		global.gameOver = true;
 	}
+	playerTurn = true;
 	return 0;
 }
 
@@ -571,7 +613,7 @@ function structCopy(src, dest)
 // Define unit positions
 function defineUnitPositions()
 {
-	var unitXPos=350;
+	var unitXPos=250;
 	var unitYPos=350;
 	var enemySeparation=-150
 	var unitRankSeparation=250;

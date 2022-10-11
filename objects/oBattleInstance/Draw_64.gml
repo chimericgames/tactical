@@ -1,6 +1,6 @@
 var ii=0;
 
-if playerTurn
+if playerTurn && !battleStart
 {
 	// Draw battle choices for the active character
 	draw_text(menuX,menuY+ii*leading,string(activeCharacter.name)); ii++;
@@ -100,23 +100,34 @@ if displayUnitStats
 	// Draw active character stats
 	if activeEnemy != noone
 	{
-		drawCharacterStats(activeCharacter, activeEnemy, 400, 20);
-		drawCharacterStats(activeEnemy, activeCharacter, 850, 20);
+		drawCharacterStats(activeCharacter, activeEnemy, window_get_width()-500, 400);
+		//drawCharacterStats(activeEnemy, activeCharacter, window_get_width()-500, 400);
 	}
 }
 
 // Draw the turn order and list the health of all party members
 ii = 0;
-var turnOrderX = window_get_width()-275;
+var turnOrderX = window_get_width()-500;
 var turnOrderY = 20;
 var turnOrderCount = array_length(turnOrder);
-draw_text(turnOrderX,turnOrderY+ii*leading,"Turn: " + string(turnCount)); ii++;
+draw_text(turnOrderX,turnOrderY+ii*leading,"Turn: " + string(turnIndex+1)); ii++;
 draw_text(turnOrderX,turnOrderY+ii*leading,"Turn Order:"); ii++;
 for (var i=0; i<turnOrderCount; i++)
 {
 	var unit = turnOrder[i];
-	draw_text(turnOrderX,turnOrderY+ii*leading,"[" + string(unit.position) + "]" + string(unit.name) + ": " + string(unit.hitpoints)); ii++;
+	draw_text(turnOrderX,turnOrderY+ii*leading,"[" + string(unit.position) + "]" + string(unit.name) + ": " + string(unit.hitpoints) + "/" + string(unit.maxHitpoints)); ii++;
 }
+
+// Draw queued actions
+var turnOrderY = 20 + leading * 2;
+ii = 0;
+var queuedActions = array_length(actionQueue);
+for (var i=0; i<queuedActions; i++)
+{
+	var action = actionQueue[i,1];
+	draw_text(turnOrderX+325,turnOrderY+ii*leading,string(action)); ii++;
+}
+
 
 // Debug mode
 if global.debugMode
