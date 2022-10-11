@@ -88,7 +88,7 @@ function calculateResistance(character = noone)
 
 function calculateLastStandChance(character = noone)
 {
-	return character.endurance*.025;
+	return character.endurance * .0125 + character.willpower * .025;
 }
 
 // Determine all possible menu choices for the first character's turn
@@ -351,7 +351,7 @@ function checkUnitKO(unit)
 		if unit.alignment = Alignment.Foe
 			activeEnemy = noone;
 					
-		// Remove the KO'd unit from the turn order					
+		// Remove the KO'd unit from the turn order
 		var turnOrderCount = array_length(turnOrder);
 		for (var i=0; i<turnOrderCount; i++) 
 		{					

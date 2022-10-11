@@ -30,6 +30,7 @@ function drawCharacterStats(unit, foe, statsX, statsY)
 	}
 	
 	// Draw base stats for active character
+	/*
 	draw_text(statsX,statsY+ii*leading,"Base Stats: "); ii++;
 	draw_text(statsX+10,statsY+ii*leading,"Strength: "+string(unit.strength)); ii++;
 	draw_text(statsX+10,statsY+ii*leading,"Spirit: "+string(unit.spirit)); ii++;
@@ -37,6 +38,8 @@ function drawCharacterStats(unit, foe, statsX, statsY)
 	draw_text(statsX+10,statsY+ii*leading,"Technique: "+string(unit.technique)); ii++;
 	draw_text(statsX+10,statsY+ii*leading,"Swiftness: "+string(unit.swiftness)); ii++;
 	draw_text(statsX+10,statsY+ii*leading,"Vitality: "+string(unit.vitality)); ii++;
+	draw_text(statsX+10,statsY+ii*leading,"Willpower: "+string(unit.willpower)); ii++;
+	*/
 	
 	// Draw derived stats for active character
 	ii++;

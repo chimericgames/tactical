@@ -3,12 +3,13 @@ randomize();
 
 // Constants
 global.initialActionDelay = 5; // The delay at the start of combat
+global.menuDelay = 2; // The delay after selecting a unit's action
 global.actionDelay = 30; // Delay after actions
 global.critDamage = 2;
-global.baseHitChance=.65;
-global.minHitChance=.05;
-global.swiftnessVariance=1.5; // Slightly randomizes turn order
-global.battleLog=[];
+global.baseHitChance = .65;
+global.minHitChance = .05;
+global.swiftnessVariance = 1.5; // Slightly randomizes turn order
+global.battleLog = [];
 global.gameOver = false;
 
 // Passive abilities
@@ -17,12 +18,12 @@ global.passives =
 	guardian :
 	{
 		name : "Guardian",
-		description : "While defending, takes a single-target hit for an adjacent ally, once per turn.",
+		description : "Once per turn while defending, takes an attack for an adjacent ally.",
 	},		
 	viciousCounter :
 	{
 		name : "Vicious Counter",
-		description : "While defending, counter attacks deal double damage.",
+		description : "While defending, counter attacks deal double damage and have an increased chance to be critical strikes.",
 	},			
 	predator :
 	{
@@ -57,12 +58,12 @@ global.passives =
 	firebug :
 	{
 		name : "Firebug",
-		description : "",
+		description : "Fire items have a 50% chance to not consume a charge when used. Ignites have increased duration.",
 	},				
 	irrepressible :
 	{
 		name : "Irrepressible",
-		description : "",
+		description : "Unaffected by the effects of bad morale and the effects of good morale are increased.",
 	},	
 	falconer :
 	{
@@ -107,17 +108,23 @@ global.passives =
 	herosJourney :
 	{
 		name : "Hero's Journey",
-		description : "Receives double the benefits from training.",
+		description : "Receives double the benefits from training and increased benefits from combat buffs.",
 	},	
-	ironResolve :
+	survivor :
 	{
-		name : "Iron Resolve",
-		description : "Gains 'Inspired' after resisting being downed. Attack and defense is increased for each downed ally.",
+		name : "Survivor",
+		description : "Attack and defense is increased for each downed ally.",
 	},		
 }
 
 global.adventurePassives =
 {
+
+	fletcher : 
+	{
+		name : "Fletcher",
+		description : "Creates a random quiver of arrows while the party camps.",
+	},
 
 	overwatch :
 	{
@@ -128,7 +135,7 @@ global.adventurePassives =
 	rousingVerse :
 	{
 		name : "Rousing Verse", 
-		description : "Reduces the effects of low morale and increases the effects of good morale while leading.",	// Can reduce and increase always be 25%?
+		description : "Reduces the effects of low morale and increases the effects of good morale after camping.",	// Can reduce and increase always be 25%?
 	},
 
 	fateWeaver :
@@ -148,20 +155,23 @@ global.adventurePassives =
 // Items
 global.items = 
 {
+	
 	drinkingHorn :
 	{
 		name : "Carved Drinking Horn",
 		description : "",
 		charges : 4,
 		isBattleChoice : true,
-	},	
+	},
+	
 	wineSkin :
 	{
 		name : "Enchanted Wineskin",
 		description : "",
 		charges : infinity,
 		isBattleChoice : true,
-	},		
+	},
+	
 	shatteredShackles :
 	{
 		name : "Shattered Shackles",
@@ -169,77 +179,79 @@ global.items =
 		charges : -1,
 		isBattleChoice : false,			
 	},
+	
 	herbalBalm :
 	{
 		name : "Herbal Balm",
 		description : "",
 		charges : 4,
 		isBattleChoice : true,
-	},		
+	},
+	
 	furyDraught :
 	{
 		name : "Fury Draught",
 		description : "",
 		charges : 2,
 		isBattleChoice : true,
-	},		
+	},
+	
 	woad :
 	{
 		name : "Woad",
 		description : "",
 		charges : -1,
 		isBattleChoice : false,
-	},		
+	},
+	
 	witbaneToxin :
 	{
 		name : "Witbane Toxin",
 		description : "",
 		charges : 4,
 		isBattleChoice : true,
-	},		
+	},
+	
 	nectarUnguent :
 	{
 		name : "Nectar Unguent",
 		description : "",
 		charges : 4,
 		isBattleChoice : false,
-	},		
+	},
+	
 	fieldMedkit :
 	{
 		name : "Field Medkit",
 		description : "",
 		charges : 4,
 		isBattleChoice : true,
-	},		
+	},
+	
 	whetstone :
 	{
 		name : "Whetstone",
 		description : "",
 		charges : -1,
 		isBattleChoice : false,
-	},		
+	},
+	
 	pitchFlask :
 	{
 		name : "Pitch Flask",
 		description : "",
 		charges : 1,
 		isBattleChoice : true,
-	},		
-	starEarrings :
-	{
-		name : "Star Earrings",
-		description : "",
-		charges : -1,
-		isBattleChoice : false,
-	},		
+	},
+	
 	falconryGauntlet :
 	{
 		name : "Falconry Gauntlet",
 		description : "",
 		charges : -1,
 		isBattleChoice : false,		
-		
 	},
+	
 	galeCharm :
 	{
 		name : "Gale Charm",
@@ -247,6 +259,7 @@ global.items =
 		charges : 2,
 		isBattleChoice : true,
 	},
+	
 	runicTalisman :
 	{
 		name : "Runic Talisman",
@@ -254,6 +267,7 @@ global.items =
 		charges : 0,
 		isBattleChoice : true,
 	},
+	
 	greathartReigns :
 	{
 		name : "greathartReigns",
@@ -261,6 +275,55 @@ global.items =
 		charges : -1,
 		isBattleChoice : false,
 	},
+	
+	greathartReigns :
+	{
+		name : "greathartReigns",
+		description : "Restores 1 hp per combat turn. Doubles the chances of resisting being downed once per battle.",
+		charges : -1,
+		isBattleChoice : false,
+	},
+	
+	broadheadQuiver :	// Acatl makes these 30% of the time
+	{
+		name : "Broadhead Arrow Quiver",
+		description : "A quiver containing specialized arrows designed for bleeding out big game.", // +1 damage, +2 bleeding
+		charges : 6,
+		isBattleChoice : false,
+	},
+	
+	poisonedQuiver :	// Acatl makes these 20% of the time
+	{
+		name : "Poisoned Arrow Quiver",
+		description : "A quiver containing specialized arrows designed to deliver a fast-acting poison.", // +4 poison
+		charges : 6,
+		isBattleChoice : false,
+	},
+	
+	incendiaryQuiver :	// Acatl makes these 20% of the time
+	{
+		name : "Incendiary Arrow Quiver",
+		description : "A quiver containing specialized arrows designed to be ignited.", // +4 fire
+		charges : 6,
+		isBattleChoice : false,
+	},
+	
+	bodkinQuiver :	// Acatl makes these 20% of the time
+	{
+		name : "Bodkin Arrow Quiver",
+		description : "A quiver containing specialized arrows designed to penetrate light armor.", // +2 penetration
+		charges : 6,
+		isBattleChoice : false,
+	},
+	
+	explosiveQuiver :	// Acatl makes these 10% of the time
+	{
+		name : "Bodkin Arrow Quiver",
+		description : "A quiver containing specialized arrows designed to penetrate light armor.", // +2 penetration
+		charges : 6,
+		isBattleChoice : false,
+	},		
+	
 }	
 
 // Active abilities
@@ -306,7 +369,7 @@ global.battleChoices =
 	{
 		name: "Rally",
 		manaCost : 1,
-		description : "",		
+		description : "The active character and a target ally attack a target simultaneously, combining their attack power.",
 	},	
 	deadeye :
 	{
@@ -355,7 +418,7 @@ global.battleChoices =
 		name : "Sanctuary",
 		manaCost : 1,
 		description : "Prevents a quarter of elemental damage dealt to allies. Damage prevented in this way is reflected to foes with doubled damage.",
-	}
+	},
 	lashOut :
 	{
 		name : "Lash Out",	
@@ -634,7 +697,7 @@ global.weapons =
 	
 	monsterWings :
 	{
-		tags : [ global.weaponProperties.crushing, global.weaponProperties.flesh, global.weaponProperties.large ],
+		tags : [ global.weaponProperties.crushing, global.weaponProperties.flesh, global.weaponProperties.large, global.weaponProperties.pole ],
 	},
 
 	monsterHorns :
@@ -982,6 +1045,7 @@ global.characters =
 		technique : 6,
 		swiftness : 3,
 		vitality : 5,
+		willpower : 5,
 		active : global.battleChoices.rally,
 		passive : [ global.passives.guardian, global.passives.viciousCounter ],
 		items : [ global.items.drinkingHorn, global.items.herbalBalm ],
@@ -1012,6 +1076,7 @@ global.characters =
 		technique : 5,
 		swiftness : 4,
 		vitality : 6,
+		willpower : 3,
 		active : global.battleChoices.deadeye,
 		passive : [ global.passives.predator, global.passives.sunderer ],
 		items : [ global.items.furyDraught, global.items.woad ],
@@ -1044,6 +1109,7 @@ global.characters =
 		technique : 6,
 		swiftness : 7,
 		vitality : 4,
+		willpower : 2,
 		active : global.battleChoices.envenom,
 		passive : [ global.passives.sharpReflexes, global.passives.beguiling ],
 		items : [ global.items.witbaneToxin, global.items.nectarUnguent ],
@@ -1074,6 +1140,7 @@ global.characters =
 		technique : 4,
 		swiftness : 3,
 		vitality : 8,
+		willpower : 7,
 		active : global.battleChoices.cryHavoc,
 		passive : [ global.passives.unyielding, global.passives.unstoppable ],
 		items : [ global.items.fieldMedkit, global.items.whetstone ],
@@ -1104,9 +1171,10 @@ global.characters =
 		technique : 8,
 		swiftness : 5,
 		vitality : 3,
+		willpower : 1,
 		active : global.battleChoices.ignite,
 		passive : [ global.passives.firebug, global.passives.irrepressible ],
-		items : [ global.items.pitchFlask, global.items.starEarrings ],
+		items : [ global.items.pitchFlask, global.items.incendiaryQuiver ],
 		// Adventure skills
 		leadership : Skill.Decent,
 		scouting : Skill.Skilled,
@@ -1134,6 +1202,7 @@ global.characters =
 		technique : 5,
 		swiftness : 4,
 		vitality : 3,
+		willpower : 3,
 		active : global.battleChoices.harry,
 		passive : [ global.passives.falconer, global.passives.herbalist ],
 		items : [ global.items.falconryGauntlet , global.items.herbalBalm ],
@@ -1142,7 +1211,7 @@ global.characters =
 		scouting : Skill.Decent,
 		huntingGathering : Skill.Skilled,
 		cooking : Skill.Masterful,
-		adventurePassive : [],
+		adventurePassive : [ global.adventurePassives.fletcher ],
 		//protects : [], // His pet
 	},
 	
@@ -1189,6 +1258,7 @@ global.characters =
 		technique : 5,
 		swiftness : 4,
 		vitality : 4,
+		willpower : 4,
 		active : global.battleChoices.tailWind,
 		passive : [ global.passives.aerialist, global.passives.spiritWard ],
 		items : [ global.items.galeCharm ],
@@ -1218,8 +1288,9 @@ global.characters =
 		spirit : 1,
 		endurance : 7,
 		technique : 3,
-		swiftness : 2,
+		swiftness : 3,
 		vitality : 5,
+		willpower : 5,
 		active : global.battleChoices.batteringRam,
 		passive : [ global.passives.berserker, global.passives.pulverize ],
 		items : [ global.items.wineSkin, global.items.shatteredShackles ],	// Alkimos' shackles are detrimental to technique and need to be removed by a smith
@@ -1252,6 +1323,7 @@ global.characters =
 		technique : 4,
 		swiftness : 4,
 		vitality : 4,
+		willpower : 6,
 		active : global.battleChoices.sanctuary,
 		passive : [ global.passives.benediction, global.passives.fateBinder ],
 		items : [ global.items.runicTalisman, global.items.greathartReigns ],	// Her items are locked
@@ -1282,8 +1354,9 @@ global.characters =
 		technique : 2,
 		swiftness : 3,
 		vitality : 3,
+		willpower : 8,
 		active : global.battleChoices.lashOut,
-		passive : [ global.passives.herosJourney, global.passives.ironResolve ],
+		passive : [ global.passives.herosJourney, global.passives.survivor ],
 		items : [  ],
 		// Adventure skills
 		leadership : Skill.Skilled,
@@ -1322,6 +1395,7 @@ global.enemies =
 		technique : 0,
 		swiftness : 0,
 		vitality : 6,
+		willpower : 0,
 		active : global.battleChoices.none,
 		passive : [ ],
 		items : [ ]		
@@ -1345,9 +1419,10 @@ global.enemies =
 		technique : 0,
 		swiftness : 0,
 		vitality : 7,
+		willpower : 0,
 		active : global.battleChoices.none,
 		passive : [ ],
-		items : [ ]		
+		items : [ ]	
 	},	
 
 	heavyTrainingDummy :
@@ -1368,6 +1443,7 @@ global.enemies =
 		technique : 0,
 		swiftness : 0,
 		vitality : 8,
+		willpower : 0,
 		active : global.battleChoices.none,
 		passive : [ ],
 		items : [ ]		
@@ -1385,12 +1461,13 @@ global.enemies =
 		weapon2Name : "Piercing Teeth",
 		armor : global.armors.light,
 		armorName : "",
-		strength : 6,
+		strength : 4,
 		spirit : 2, 
-		endurance : 5,
+		endurance : 4,
 		technique : 6,
-		swiftness : 6,
-		vitality : 7,
+		swiftness : 5,
+		vitality : 5,
+		willpower : 1,
 		active : global.battleChoices.none,
 		passive : [ ],
 		items : [ ]		
@@ -1402,7 +1479,7 @@ global.enemies =
 		race : "Human",
 		alignment : Alignment.Foe,
 		size : Size.Normal,
-		weapon1 : global.weapons.longbow,
+		weapon1 : global.weapons.recurveBow,
 		weapon1Name : "Rough-hewn Selfbow",
 		weapon2 : global.weapons.dagger,
 		weapon2Name : "Bone-Carved Hunting Knife",
@@ -1412,8 +1489,9 @@ global.enemies =
 		spirit : 2, 
 		endurance : 3,
 		technique : 3,
-		swiftness : 5,
+		swiftness : 4,
 		vitality : 4,
+		willpower : 2,
 		active : global.battleChoices.none,
 		passive : [ ],
 		items : [ ]		
