@@ -210,11 +210,11 @@ function attackTarget(offense, defense, canBeCountered = true)
 	// Increase defender's defense if they're defending
 	if defense.defending
 	{
-		var defenseOriginal = defenseDefense;
-		var techOriginal = defenseTech;
+		//var defenseOriginal = defenseDefense;
+		//var techOriginal = defenseTech;
 		defenseDefense += 4;
 		defenseTech += 2;
-		log(string(defense.name) + " is defending, raising their defense from " + string(defenseOriginal) + " to " + string(defenseDefense) + " and their technique from " + string(techOriginal) + " to " + string(defenseTech) + ".");
+		//log(string(defense.name) + " is defending, raising their defense from " + string(defenseOriginal) + " to " + string(defenseDefense) + " and their technique from " + string(techOriginal) + " to " + string(defenseTech) + ".");
 	}		
 	
 	// See if the attack hits
@@ -437,7 +437,7 @@ function advanceTurn()
 	activeCharacter.defending = false;
 	
 	log("");
-	log("Turn advanced. " + string(activeCharacter.name) + "'s turn.");
+	log(string(activeCharacter.name) + "'s turn.");
 	
 	// If unit is a player, create the battle menu.
 	if !enemyTurn()
@@ -457,7 +457,6 @@ function queueAction(action = "Attack", target = noone)
 function getTarget(unit)
 {
 	var enemyList = unit.alignment == Alignment.Foe ? global.partyPositions : enemyPositions;
-//	show_debug_message("Enemy list length: " + string(array_length(enemyList)));
 	var range = unit.range;
 	
 	// Short range units auto attack whoever is engaged with them, or the nearest front row unit
@@ -556,7 +555,7 @@ function enemyTurn(unit = activeCharacter)
 {
 	if unit.alignment == Alignment.Foe
 	{
-		//log("Enemy's turn...");
+
 		// Enemy's turn
 		playerTurn = false;	
 		
@@ -569,12 +568,11 @@ function enemyTurn(unit = activeCharacter)
 			// Enemies in the front row switch weapons randomly. TODO: Both rows
 			if unit.position <= 3 && dieRoll(2) = 1
 			{
-				swapWeapons(unit); 
-				//log(string(unit.name) + " switches weapons.");			
+				swapWeapons(unit);		
 			}	
 			
-			//attackTarget(unit, targetEnemy);
 			queueAction("Attack", targetEnemy);
+			log(string(unit.name) + " chooses their action.")	
 			
 			// Advance the turn
 			actionCountdown = global.menuDelay;

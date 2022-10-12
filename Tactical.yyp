@@ -4,6 +4,8 @@
     {"id":{"name":"helpers","path":"scripts/helpers/helpers.yy",},"order":2,},
     {"id":{"name":"oBattleInstance","path":"objects/oBattleInstance/oBattleInstance.yy",},"order":0,},
     {"id":{"name":"enums","path":"scripts/enums/enums.yy",},"order":3,},
+    {"id":{"name":"battleActions","path":"scripts/battleActions/battleActions.yy",},"order":5,},
+    {"id":{"name":"inputControl","path":"scripts/inputControl/inputControl.yy",},"order":4,},
     {"id":{"name":"drawCharacterStats","path":"scripts/drawCharacterStats/drawCharacterStats.yy",},"order":1,},
     {"id":{"name":"characterData","path":"scripts/characterData/characterData.yy",},"order":0,},
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},"order":0,},
