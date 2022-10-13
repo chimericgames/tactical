@@ -58,7 +58,6 @@ if battleStart
 		log("");
 		log("NEW ROUND.");
 		log("");
-		log(string(activeCharacter.name) + "'s turn.");
 	}
 }
 

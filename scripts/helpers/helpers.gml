@@ -44,7 +44,7 @@ function swapWeapons(character = noone)
 	character.range = getWeaponRange(character);
 	character.attack = calculateAttack(character);
 	character.weaponHits = calculateWeaponHits(character);
-	character.critChance = calculateCritChance(character);
+	character.critChance = calculateWeaponCritChance(character);
 	character.activeWeaponName = getWeaponName(character);
 	log(string(activeCharacter.name) + " switches from their " + string(oldWeaponName) + " to their " + string(character.activeWeaponName) + ".");
 }
@@ -67,7 +67,7 @@ function calculateWeaponHits(character = noone)
 	return weaponHits;
 }
 
-function calculateCritChance(character = noone)
+function calculateWeaponCritChance(character = noone)
 {
 	if character.equippedWeapon == 1
 		var weaponCritModifier = character.weapon1.crit;
@@ -76,14 +76,24 @@ function calculateCritChance(character = noone)
 	return clamp(power(character.technique+weaponCritModifier,1.5)*.0125,0,1)*100;
 }
 
+function calculateWeaponPenetration(character = noone)
+{
+	if character.equippedWeapon == 1
+		var penetration = character.weapon1.penetration;
+	else if character.equippedWeapon == 2
+		var penetration = character.weapon2.penetration;
+	return penetration;
+}
+
+// Weapon defense (shields, etc) used to factor directly into defense, but I want it to only do so while blocking
 function calculateDefense(character = noone)
 {
-	return (character.endurance+character.armor.armorProtection+max(character.weapon1.armorProtection,character.weapon2.armorProtection))*2;
+	return (character.endurance+character.armor.armorProtection/*+max(character.weapon1.armorProtection,character.weapon2.armorProtection)*/)*2;
 }
 
 function calculateResistance(character = noone)
 {
-	return (character.spirit+character.armor.elementalProtection+max(character.weapon1.elementalProtection,character.weapon2.elementalProtection))*2;
+	return (character.spirit+character.armor.elementalProtection/*+max(character.weapon1.elementalProtection,character.weapon2.elementalProtection)*/)*2;
 }
 
 function calculateLastStandChance(character = noone)
@@ -198,8 +208,20 @@ function getRandomTarget(targetList)
 	return target;
 }
 
+// Return true if a unit has a particular passive
+function checkUnitPassive(unit, passive)
+{
+	var passivesCount = array_length(unit.passive);
+	for (var i = 0; i < passivesCount; i++) 
+	{
+		var passiveToCheck = unit.passive[i];
+		if passiveToCheck == passive
+			return 1;
+	}
+}
+
 // Attack target
-function attackTarget(offense, defense, canBeCountered = true)
+function attackTarget(offense, defense, canBeCountered = true, isACounter = false)
 {	
 	
 	var offenseDamage = offense.attack;
@@ -212,7 +234,10 @@ function attackTarget(offense, defense, canBeCountered = true)
 	{
 		//var defenseOriginal = defenseDefense;
 		//var techOriginal = defenseTech;
-		defenseDefense += 4;
+		
+		// While defending, increase defense by 4 and then add defense from any shields, etc
+		defenseDefense += (2 + max(defense.weapon1.armorProtection,defense.weapon2.armorProtection)) * 2;
+		
 		defenseTech += 2;
 		//log(string(defense.name) + " is defending, raising their defense from " + string(defenseOriginal) + " to " + string(defenseDefense) + " and their technique from " + string(techOriginal) + " to " + string(defenseTech) + ".");
 	}		
@@ -232,9 +257,20 @@ function attackTarget(offense, defense, canBeCountered = true)
 			offenseDamage = round(addVariance(offenseDamage));
 			show_debug_message(string(offense.name) + "'s attack damage randomized: " + string(offenseDamage));
 		
+			// Viscious Counter passive
+			if isACounter
+			{
+				// TODO: This does not work
+				if checkUnitPassive(offense, global.passives.viciousCounter)
+				{
+					offenseDamage *= global.viciousCounterMult;	
+					log(string(offense.name) + "'s Vicious Counter skill doubles the damage!");
+				}
+			}
+		
 			// See if the hit is a crit
 			var critRoll = dieRoll();
-			var critChance = calculateCritChance(offense);
+			var critChance = calculateWeaponCritChance(offense);
 			show_debug_message(string(offense.name) + "'s crit roll: " + string(critRoll) + " / " + string(critChance)+"%");
 			var crit = critRoll<=critChance
 			if crit 
@@ -243,16 +279,27 @@ function attackTarget(offense, defense, canBeCountered = true)
 				offenseDamage *= global.critDamage;
 				show_debug_message(string(offense.name) + "'s critical attack damage: " + string(offenseDamage));
 			}	
-			var damageDealt = max(offenseDamage-defenseDefense,0);
+			
+			// Apply defense
+			show_debug_message(string(defense.name) + " has " + string(defenseDefense) + " defense.");
+			var weaponPen = offense.penetration;
+			var defenseAdjusted = max(defenseDefense - weaponPen, 0)
+			if weaponPen > 0
+				show_debug_message(string(offense.name) + "'s weapon penetration reduced the defense to " + string(defenseAdjusted) + ".");			
+			var damageDealt = max(offenseDamage - defenseAdjusted, 0);
+			
+			// Log attack result
 			if crit
 			{
-				log(string(offense.name) + " attacks " + string(defense.name) + " with their " + string(offense.activeWeaponName) + " landing a Critical hit dealing " + string(damageDealt) + " damage! (" + string(offenseDamage) + " - " + string(defenseDefense) + ")");
+				log(string(offense.name) + " attacks " + string(defense.name) + " with their " + string(offense.activeWeaponName) + " landing a Critical hit dealing " + string(damageDealt) + " damage! (" + string(offenseDamage) + " - " + string(defenseAdjusted) + ")");
 			}	
 			else	
 			{
-				log(string(offense.name) + " attacks " + string(defense.name) + " with their " + string(offense.activeWeaponName) + " and connects, dealing " + string(damageDealt) + " damage. (" + string(offenseDamage) + " - " + string(defenseDefense) + ")");
-			}	
-			defense.hitpoints = max(defense.hitpoints - damageDealt, 0);
+				log(string(offense.name) + " attacks " + string(defense.name) + " with their " + string(offense.activeWeaponName) + " and connects, dealing " + string(damageDealt) + " damage. (" + string(offenseDamage) + " - " + string(defenseAdjusted) + ")");
+			}
+			
+			// Apply the damage
+			defense.hitpoints = max(defense.hitpoints - round(damageDealt), 0);
 
 			checkUnitKO(defense);
 
@@ -267,11 +314,11 @@ function attackTarget(offense, defense, canBeCountered = true)
 			var counteredRoll = dieRoll();
 			var counterChance = checkOdds(defenseTech, offenseTech, .5, 0);
 			show_debug_message(string(offense.name) + "'s chance to be countered roll: " + string(counteredRoll) + " / " + string(counterChance)+"%");
-			var countered = counteredRoll<=counterChance
+			var countered = counteredRoll <= counterChance
 			if countered
 			{
 				log(string(offense.name) + " attacks " + string(defense.name) + " with their " + string(offense.activeWeaponName) + " and misses. " + string(defense.name) + " dodges and retaliates!");
-				attackTarget(defense,offense,false);
+				attackTarget(defense,offense,false,true);
 				exit;
 			}
 		}	

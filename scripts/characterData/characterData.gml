@@ -39,6 +39,11 @@ global.passives =
 	{
 		name : "Sharp Reflexes",
 		description : "",
+	},			
+	perniciousHorticulturist :
+	{
+		name : "Pernicious Horticulturist",
+		description : "Poison items have a 50% chance to not consume a charge when used. Poisoned targets are also enfeebled.",
 	},				
 	beguiling :
 	{
@@ -58,7 +63,7 @@ global.passives =
 	firebug :
 	{
 		name : "Firebug",
-		description : "Fire items have a 50% chance to not consume a charge when used. Ignites have increased duration.",
+		description : "Fire items have a 50% chance to not consume a charge when used. Ignites have increased damage.",
 	},				
 	irrepressible :
 	{
@@ -255,7 +260,7 @@ global.items =
 	galeCharm :
 	{
 		name : "Gale Charm",
-		description : "Consume charge: Blasts the user to the rear position and deals light elemental damage to the enemy front row.",
+		description : "Consume charge: Blasts the user to the rear position and deals elemental damage to the enemy front row.",
 		charges : 2,
 		isBattleChoice : true,
 	},
@@ -377,9 +382,9 @@ global.battleChoices =
 		manaCost : 1,
 		description : "",		
 	},	
-	envenom :
+	thorns :
 	{
-		name: "Envenom",
+		name: "Thorns",
 		manaCost : 1,
 		description : "",		
 	},	
@@ -1110,8 +1115,8 @@ global.characters =
 		swiftness : 7,
 		vitality : 4,
 		willpower : 2,
-		active : global.battleChoices.envenom,
-		passive : [ global.passives.sharpReflexes, global.passives.beguiling ],
+		active : global.battleChoices.thorns,
+		passive : [ global.passives.sharpReflexes, global.passives.perniciousHorticulturist ],
 		items : [ global.items.witbaneToxin, global.items.nectarUnguent ],
 		// Adventure skills
 		leadership : Skill.Dismal,
@@ -1326,7 +1331,7 @@ global.characters =
 		willpower : 6,
 		active : global.battleChoices.sanctuary,
 		passive : [ global.passives.benediction, global.passives.fateBinder ],
-		items : [ global.items.runicTalisman, global.items.greathartReigns ],	// Her items are locked
+		items : [ global.items.runicTalisman, global.items.greathartReigns ],	// These items are locked
 		// Adventure skills
 		leadership : Skill.Skilled,
 		scouting : Skill.Skilled,
@@ -1514,7 +1519,8 @@ function calculateSubstats(unitList = noone, unitCount = 0)
 		character.range = getWeaponRange(character);
 		character.attack = calculateAttack(character);
 		character.weaponHits = calculateWeaponHits(character);
-		character.critChance = calculateCritChance(character);
+		character.critChance = calculateWeaponCritChance(character);
+		character.penetration = calculateWeaponPenetration(character);
 		character.maxHitpoints = calculateHP(character);
 		character.defense = calculateDefense(character);
 		character.resistance = calculateResistance(character);
