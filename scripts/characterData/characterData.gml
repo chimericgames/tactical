@@ -5,12 +5,13 @@ randomize();
 global.initialActionDelay = 5; // The delay at the start of combat
 global.menuDelay = 2; // The delay after selecting a unit's action
 global.actionDelay = 30; // Delay after actions
-global.critDamage = 2;
+global.critDamage = 1.5;
 global.baseHitChance = .65;
 global.minHitChance = .05;
 global.swiftnessVariance = 1.5; // Slightly randomizes turn order
 global.battleLog = [];
 global.gameOver = false;
+global.derivedStatMultiplier = 2; // Makes attack, defense, and hitpoints larger for ease of use and interest
 
 // Passive abilities
 global.passives =
@@ -438,7 +439,7 @@ global.weaponProperties =
 	
 	base:
 	{
-		damage : 4,
+		damage : 5,
 		crit : 0,
 		wieldiness : 0,
 		penetration : 0,
@@ -715,7 +716,7 @@ global.weapons =
 		tags : [ global.weaponProperties.slashing ],
 	},
 	
-	longsword :
+	heavySword :
 	{
 		tags : [ global.weaponProperties.slashing, global.weaponProperties.large ],
 	},	
@@ -855,7 +856,7 @@ calculateWeaponStats(global.weapons.terribleClaws);
 calculateWeaponStats(global.weapons.monsterWings);
 calculateWeaponStats(global.weapons.monsterHorns);
 calculateWeaponStats(global.weapons.sword);
-calculateWeaponStats(global.weapons.longsword);
+calculateWeaponStats(global.weapons.heavySword);
 calculateWeaponStats(global.weapons.spear);
 calculateWeaponStats(global.weapons.axe);
 calculateWeaponStats(global.weapons.poleAxe);
@@ -886,35 +887,27 @@ global.armors =
 		evasionBonus : 0,
 	},
 	
-	cloth :
-	{
-		weight : 1,		
-		armorProtection : 1,
-		elementalProtection : 2,
-		evasionBonus : 0,
-	},
-	
 	light :
 	{
-		weight : 2,
-		armorProtection : 2,
-		elementalProtection : 3,
+		weight : 1,
+		armorProtection : 1,
+		elementalProtection : 2,
 		evasionBonus : 0,
 	},
 
 	medium :
 	{
-		weight : 3,
-		armorProtection : 3,
-		elementalProtection : 2,
+		weight : 2,
+		armorProtection : 2,
+		elementalProtection : 1,
 		evasionBonus : 0,
 	},
 	
 	heavy :
 	{
-		weight : 4,
-		armorProtection : 4,
-		elementalProtection : 1,
+		weight : 3,
+		armorProtection : 3,
+		elementalProtection : 0,
 		evasionBonus : 0,
 	},
 	
@@ -1168,7 +1161,7 @@ global.characters =
 		weapon1Name : "Blackened Longbow",
 		weapon2 : global.weapons.dagger,
 		weapon2Name : "Obsidian Dagger",
-		armor : global.armors.cloth,
+		armor : global.armors.light,
 		armorName : "Cotton Tunic",
 		strength : 4,
 		spirit : 5, 
@@ -1199,14 +1192,14 @@ global.characters =
 		weapon1Name : "Eztli",
 		weapon2 : global.weapons.mediumShield,
 		weapon2Name : "Deerskin Feathered Shield",
-		armor : global.armors.cloth,
+		armor : global.armors.light,
 		armorName : "Worn Poncho",
 		strength : 3,
-		spirit : 6,
+		spirit : 5,
 		endurance : 4,
 		technique : 5,
 		swiftness : 4,
-		vitality : 3,
+		vitality : 4,
 		willpower : 3,
 		active : global.battleChoices.harry,
 		passive : [ global.passives.falconer, global.passives.herbalist ],
@@ -1294,7 +1287,7 @@ global.characters =
 		endurance : 7,
 		technique : 3,
 		swiftness : 3,
-		vitality : 5,
+		vitality : 6,
 		willpower : 5,
 		active : global.battleChoices.batteringRam,
 		passive : [ global.passives.berserker, global.passives.pulverize ],
@@ -1347,7 +1340,7 @@ global.characters =
 		race : "Human",
 		alignment : Alignment.Friend,
 		size : Size.Normal,
-		weapon1 : global.weapons.longsword, 
+		weapon1 : global.weapons.heavySword, 
 		weapon1Name : "Heirloom Longsword, 'Fable'",
 		weapon2 : global.weapons.bolas,
 		weapon2Name : "Braided Bolas",
@@ -1464,11 +1457,11 @@ global.enemies =
 		weapon1Name : "Terrible Claws",
 		weapon2 : global.weapons.piercingTeeth,
 		weapon2Name : "Piercing Teeth",
-		armor : global.armors.light,
+		armor : global.armors.monsterArmorEvasion,
 		armorName : "",
-		strength : 4,
+		strength : 5,
 		spirit : 2, 
-		endurance : 4,
+		endurance : 3,
 		technique : 6,
 		swiftness : 5,
 		vitality : 5,
@@ -1492,21 +1485,44 @@ global.enemies =
 		armorName : "Tattered Leathers",
 		strength : 5,
 		spirit : 2, 
-		endurance : 3,
-		technique : 3,
+		endurance : 2,
+		technique : 4,
 		swiftness : 4,
 		vitality : 4,
 		willpower : 2,
 		active : global.battleChoices.none,
 		passive : [ ],
 		items : [ ]		
-	
 	},
+	
+	palegroveReaver :
+	{
+		name : "Palegrove Reaver",
+		race : "Human",
+		alignment : Alignment.Foe,
+		size : Size.Normal,
+		weapon1 : global.weapons.heavySword,
+		weapon1Name : "Wicked Shamshir",
+		weapon2 : global.weapons.heavySword,
+		weapon2Name : "Wicked Shamshir",
+		armor : global.armors.heavy,
+		armorName : "Rusted Plate",
+		strength : 6,
+		spirit : 1, 
+		endurance : 5,
+		technique : 2,
+		swiftness : 4,
+		vitality : 7,
+		willpower : 3,
+		active : global.battleChoices.none,
+		passive : [ ],
+		items : [ ]		
+	},	
 
 }
 
 // Create a list of enemies
-global.enemyList = [ global.enemies.flimsyTrainingDummy, global.enemies.stoutTrainingDummy, global.enemies.heavyTrainingDummy, global.enemies.crimsonPlumedRaptor, global.enemies.palegrovePoacher ];
+global.enemyList = [ global.enemies.flimsyTrainingDummy, global.enemies.stoutTrainingDummy, global.enemies.heavyTrainingDummy, global.enemies.crimsonPlumedRaptor, global.enemies.palegrovePoacher, global.enemies.palegroveReaver ];
 global.enemyCount = array_length(global.enemyList);
 
 function calculateSubstats(unitList = noone, unitCount = 0)
@@ -1521,7 +1537,7 @@ function calculateSubstats(unitList = noone, unitCount = 0)
 		character.weaponHits = calculateWeaponHits(character);
 		character.critChance = calculateWeaponCritChance(character);
 		character.penetration = calculateWeaponPenetration(character);
-		character.maxHitpoints = calculateHP(character);
+		character.maxHitpoints = calculateHitpoints(character);
 		character.defense = calculateDefense(character);
 		character.resistance = calculateResistance(character);
 		character.lastStandChance = calculateLastStandChance(character);

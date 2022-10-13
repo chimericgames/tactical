@@ -35,7 +35,7 @@ actionCountdown = global.initialActionDelay;
 // Create the enemy party
 enemyPartyList=[];
 array_push(enemyPartyList, instantiateUnit("crimsonPlumedRaptor", global.enemies));
-array_push(enemyPartyList, instantiateUnit("crimsonPlumedRaptor", global.enemies));
+array_push(enemyPartyList, instantiateUnit("palegroveReaver", global.enemies));
 array_push(enemyPartyList, instantiateUnit("crimsonPlumedRaptor", global.enemies));
 array_push(enemyPartyList, instantiateUnit("palegrovePoacher", global.enemies));
 array_push(enemyPartyList, instantiateUnit("palegrovePoacher", global.enemies));

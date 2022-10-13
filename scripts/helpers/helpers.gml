@@ -11,9 +11,9 @@ function addVariance(value, randomLow=.9, randomHigh=1.1)
 	return value;
 }
 
-function calculateHP(character = noone)
+function calculateHitpoints(character = noone)
 {
-	return (16+character.vitality*character.size*8);
+	return (8+character.vitality*character.size*4) * global.derivedStatMultiplier;
 }
 
 function getWeaponName(character = noone)
@@ -56,7 +56,7 @@ function calculateAttack(character = noone)
 		var weaponAttack = character.weapon1.damage;
 	else if character.equippedWeapon == 2
 		var weaponAttack = character.weapon2.damage;
-	return (character.strength*character.size+weaponAttack)*3;
+	return (character.strength*character.size+weaponAttack) * global.derivedStatMultiplier;
 }
 
 function calculateWeaponHits(character = noone)
@@ -89,12 +89,12 @@ function calculateWeaponPenetration(character = noone)
 // Weapon defense (shields, etc) used to factor directly into defense, but I want it to only do so while blocking
 function calculateDefense(character = noone)
 {
-	return (character.endurance+character.armor.armorProtection)*2;
+	return (character.endurance+character.armor.armorProtection) * global.derivedStatMultiplier;
 }
 
 function calculateResistance(character = noone)
 {
-	return (character.spirit+character.armor.elementalProtection)*2;
+	return (character.spirit+character.armor.elementalProtection);
 }
 
 function calculateLastStandChance(character = noone)
@@ -228,7 +228,7 @@ function attackTarget(offense, defense, canBeCountered = true, isACounter = fals
 	var offenseDamage = offense.attack;
 	var defenseDefense = defense.defense;
 	var offenseTech = offense.technique;
-	var defenseTech = defense.technique;		
+	var defenseTech = defense.technique;
 	
 	// Increase defender's defense if they're defending
 	if defense.defending
@@ -237,7 +237,7 @@ function attackTarget(offense, defense, canBeCountered = true, isACounter = fals
 		//var techOriginal = defenseTech;
 		
 		// While defending, increase defense by 4 and then add defense from any shields, etc
-		defenseDefense += (2 + max(defense.weapon1.armorProtection,defense.weapon2.armorProtection)) * 2;
+		defenseDefense += (2 + max(defense.weapon1.armorProtection, defense.weapon2.armorProtection)) * global.derivedStatMultiplier;
 		
 		defenseTech += 2;
 		//log(string(defense.name) + " is defending, raising their defense from " + string(defenseOriginal) + " to " + string(defenseDefense) + " and their technique from " + string(techOriginal) + " to " + string(defenseTech) + ".");
@@ -289,6 +289,9 @@ function attackTarget(offense, defense, canBeCountered = true, isACounter = fals
 				show_debug_message(string(offense.name) + "'s weapon penetration reduced the defense to " + string(defenseAdjusted) + ".");			
 			var damageDealt = max(offenseDamage - defenseAdjusted, 0);
 			
+			// Round the damage
+			damageDealt = round(damageDealt);
+			
 			// Log attack result
 			if crit
 			{
@@ -300,7 +303,7 @@ function attackTarget(offense, defense, canBeCountered = true, isACounter = fals
 			}
 			
 			// Apply the damage
-			defense.hitpoints = max(defense.hitpoints - round(damageDealt), 0);
+			defense.hitpoints = max(defense.hitpoints - damageDealt, 0);
 
 			checkUnitKO(defense);
 
