@@ -45,6 +45,7 @@ function swapWeapons(character = noone)
 	character.attack = calculateAttack(character);
 	character.weaponHits = calculateWeaponHits(character);
 	character.critChance = calculateWeaponCritChance(character);
+	character.penetration = calculateWeaponPenetration(character);
 	character.activeWeaponName = getWeaponName(character);
 	log(string(activeCharacter.name) + " switches from their " + string(oldWeaponName) + " to their " + string(character.activeWeaponName) + ".");
 }
@@ -88,12 +89,12 @@ function calculateWeaponPenetration(character = noone)
 // Weapon defense (shields, etc) used to factor directly into defense, but I want it to only do so while blocking
 function calculateDefense(character = noone)
 {
-	return (character.endurance+character.armor.armorProtection/*+max(character.weapon1.armorProtection,character.weapon2.armorProtection)*/)*2;
+	return (character.endurance+character.armor.armorProtection)*2;
 }
 
 function calculateResistance(character = noone)
 {
-	return (character.spirit+character.armor.elementalProtection/*+max(character.weapon1.elementalProtection,character.weapon2.elementalProtection)*/)*2;
+	return (character.spirit+character.armor.elementalProtection)*2;
 }
 
 function calculateLastStandChance(character = noone)
@@ -283,7 +284,7 @@ function attackTarget(offense, defense, canBeCountered = true, isACounter = fals
 			// Apply defense
 			show_debug_message(string(defense.name) + " has " + string(defenseDefense) + " defense.");
 			var weaponPen = offense.penetration;
-			var defenseAdjusted = max(defenseDefense - weaponPen, 0)
+			var defenseAdjusted = defenseDefense * (1 - weaponPen);
 			if weaponPen > 0
 				show_debug_message(string(offense.name) + "'s weapon penetration reduced the defense to " + string(defenseAdjusted) + ".");			
 			var damageDealt = max(offenseDamage - defenseAdjusted, 0);
