@@ -640,23 +640,51 @@ function enemyTurn(unit = activeCharacter)
 	return 0;
 }
 
-// Copy all struct variables and values to another
-function structCopy(src, dest) 
+// Copy a value
+// This will perform a deep copy on array and struct values
+function valueCopy(src)
 {
-	if is_struct(src) 
+	switch typeof(src)
 	{
-		if !is_struct(dest) dest = {};
-		var names = variable_struct_get_names(src);
-		var size = array_length(names);
-			
-		for (var i = 0; i < size; ++i) 
-		{
-			var name = names[i];
-			variable_struct_set(dest, name, variable_struct_get(src, name));
-		}
-		return true;
+	default:
+		return src;
+	case "array":
+		return arrayCopy(src);
+	case "struct":
+		return structCopy(src);
 	}
-	return -1;
+}
+
+// Copy all array members to a new array
+function arrayCopy(src)
+{
+	var size = array_length(src);
+	var dest = array_create(size);
+	
+	for (var i = 0; i < size; ++i)
+	{
+		var value = valueCopy(array_get(src, i));
+		array_set(dest, i, value);
+	}
+	
+	return dest;
+}
+
+// Copy all struct members to a new struct
+function structCopy(src) 
+{
+	var names = variable_struct_get_names(src);
+	var size = array_length(names);
+	var dest = {};
+	
+	for (var i = 0; i < size; ++i) 
+	{
+		var name = names[i];
+		var value = valueCopy(variable_struct_get(src, name));
+		variable_struct_set(dest, name, value);
+	}
+	
+	return dest;
 }
 
 // Define unit positions
@@ -683,8 +711,7 @@ function instantiateUnit(unitName, list = global.enemies) {
     var unitClass = variable_struct_get(list, unitName);
     if unitClass == undefined
         return undefined;
-    var unitInstance = {};
-    structCopy(unitClass, unitInstance);
+    var unitInstance = valueCopy(unitClass);
     return unitInstance;
 }
 
