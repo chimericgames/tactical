@@ -1285,12 +1285,12 @@ global.characters =
 		weapon2Name : "Spiral Greathorns",
 		armor : global.armors.monsterArmorEvasion,
 		armorName : "Hirsuit Hide",
-		strength : 4,
+		strength : 3,
 		spirit : 1,
 		endurance : 7,
-		technique : 3,
+		technique : 4,
 		swiftness : 3,
-		vitality : 6,
+		vitality : 7,
 		willpower : 5,
 		active : global.battleChoices.batteringRam,
 		passive : [ global.passives.berserker, global.passives.pulverize ],
@@ -1378,78 +1378,6 @@ global.characterCount = array_length(global.characterList);
 global.enemies =
 {
 
-	flimsyTrainingDummy :
-	{
-		name : "Flimsy Training Dummy",
-		race : "Construct",
-		alignment : Alignment.Foe,
-		size : Size.Normal,
-		weapon1 : global.weapons.fists,
-		weapon1Name : "None",
-		weapon2 : global.weapons.fists,
-		weapon2Name : "None",
-		armor : global.armors.light,
-		armorName : "Ramshackle Trappings",
-		strength : 0,
-		spirit : 0, 
-		endurance : 4,
-		technique : 0,
-		swiftness : 0,
-		vitality : 6,
-		willpower : 0,
-		active : global.battleChoices.none,
-		passive : [ ],
-		items : [ ]		
-	},
-	
-	stoutTrainingDummy :
-	{
-		name : "Stout Training Dummy",
-		race : "Construct",
-		alignment : Alignment.Foe,
-		size : Size.Normal,
-		weapon1 : global.weapons.fists,
-		weapon1Name : "None",
-		weapon2 : global.weapons.fists,
-		weapon2Name : "None",
-		armor : global.armors.medium,
-		armorName : "Scuffed Padded Armor",
-		strength : 0,
-		spirit : 0, 
-		endurance : 5,
-		technique : 0,
-		swiftness : 0,
-		vitality : 7,
-		willpower : 0,
-		active : global.battleChoices.none,
-		passive : [ ],
-		items : [ ]	
-	},	
-
-	heavyTrainingDummy :
-	{
-		name : "Heavy Training Dummy",
-		race : "Construct",
-		alignment : Alignment.Foe,
-		size : Size.Normal,
-		weapon1 : global.weapons.fists,
-		weapon1Name : "None",
-		weapon2 : global.weapons.fists,
-		weapon2Name : "None",
-		armor : global.armors.heavy,
-		armorName : "Plate and Chainmail",
-		strength : 0,
-		spirit : 0, 
-		endurance : 6,
-		technique : 0,
-		swiftness : 0,
-		vitality : 8,
-		willpower : 0,
-		active : global.battleChoices.none,
-		passive : [ ],
-		items : [ ]		
-	},	
-
 	crimsonPlumedRaptor :
 	{
 		name : "Crimson-Plumed Raptor",
@@ -1462,7 +1390,7 @@ global.enemies =
 		weapon2Name : "Piercing Teeth",
 		armor : global.armors.monsterArmorEvasion,
 		armorName : "",
-		strength : 5,
+		strength : 6,
 		spirit : 2, 
 		endurance : 3,
 		technique : 6,
@@ -1480,7 +1408,7 @@ global.enemies =
 		race : "Human",
 		alignment : Alignment.Foe,
 		size : Size.Normal,
-		weapon1 : global.weapons.recurveBow,
+		weapon1 : global.weapons.longbow,
 		weapon1Name : "Rough-hewn Selfbow",
 		weapon2 : global.weapons.dagger,
 		weapon2Name : "Bone-Carved Hunting Knife",
@@ -1513,7 +1441,7 @@ global.enemies =
 		strength : 6,
 		spirit : 1, 
 		endurance : 5,
-		technique : 2,
+		technique : 3,
 		swiftness : 4,
 		vitality : 7,
 		willpower : 3,
@@ -1525,15 +1453,20 @@ global.enemies =
 }
 
 // Create a list of enemies
-global.enemyList = [ global.enemies.flimsyTrainingDummy, global.enemies.stoutTrainingDummy, global.enemies.heavyTrainingDummy, global.enemies.crimsonPlumedRaptor, global.enemies.palegrovePoacher, global.enemies.palegroveReaver ];
+global.enemyList = [global.enemies.crimsonPlumedRaptor, global.enemies.palegrovePoacher, global.enemies.palegroveReaver ];
 global.enemyCount = array_length(global.enemyList);
 
-function calculateSubstats(unitList = noone, unitCount = 0)
+function calculateSubstats(unitList = noone, unitCount = 0, specificUnit = false)
 {
-	for (i=0; i<unitCount; i++)
+	for (i=0; i < unitCount; i++)
 	{
-		var character = unitList[i];
-		character.equippedWeapon = 1;
+		if specificUnit
+			var character = specificUnit;
+		else
+		{
+			var character = unitList[i];
+			character.equippedWeapon = 1;
+		}	
 		character.activeWeaponName = getWeaponName(character);
 		character.range = getWeaponRange(character);
 		character.attack = calculateAttack(character);
@@ -1544,10 +1477,13 @@ function calculateSubstats(unitList = noone, unitCount = 0)
 		character.defense = calculateDefense(character);
 		character.resistance = calculateResistance(character);
 		character.lastStandChance = calculateLastStandChance(character);
-		character.hitpoints = character.maxHitpoints;
-		character.defending = false;
-		character.concious = true;
-		character.selectable = true;
+		if specificUnit = false
+		{
+			character.hitpoints = character.maxHitpoints;
+			character.defending = false;
+			character.concious = true;
+			character.selectable = true;
+		}	
 	}
 }
 	

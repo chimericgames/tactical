@@ -2,10 +2,10 @@
 
 function dieRoll(sides = 100)
 {
-	return 1+irandom(sides-1);	
+	return 1 + irandom(sides - 1);	
 }
 
-function addVariance(value, randomLow=.9, randomHigh=1.1)
+function addVariance(value, randomLow = .9, randomHigh = 1.1)
 {
 	value *= random_range(randomLow, randomHigh);
 	return value;
@@ -13,7 +13,7 @@ function addVariance(value, randomLow=.9, randomHigh=1.1)
 
 function calculateHitpoints(character = noone)
 {
-	return (8+character.vitality*character.size*4) * global.derivedStatMultiplier;
+	return (4 + character.vitality * 4 * character.size) * global.derivedStatMultiplier;
 }
 
 function getWeaponName(character = noone)
@@ -74,7 +74,7 @@ function calculateWeaponCritChance(character = noone)
 		var weaponCritModifier = character.weapon1.crit;
 	else if character.equippedWeapon == 2
 		var weaponCritModifier = character.weapon2.crit;
-	return clamp(power(character.technique+weaponCritModifier,1.5)*.0125,0,1)*100;
+	return clamp(power(character.technique+weaponCritModifier,1.5) * .0125, 0, 1) * 100;
 }
 
 function calculateWeaponPenetration(character = noone)
@@ -89,12 +89,12 @@ function calculateWeaponPenetration(character = noone)
 // Weapon defense (shields, etc) used to factor directly into defense, but I want it to only do so while blocking
 function calculateDefense(character = noone)
 {
-	return (character.endurance+character.armor.armorProtection) * global.derivedStatMultiplier;
+	return (character.endurance + character.armor.armorProtection) * global.derivedStatMultiplier;
 }
 
 function calculateResistance(character = noone)
 {
-	return (character.spirit+character.armor.elementalProtection);
+	return (character.spirit + character.armor.elementalProtection);
 }
 
 function calculateLastStandChance(character = noone)
@@ -120,9 +120,6 @@ function populateBattleChoices()
 			array_insert(battleChoices, 3, item);
 	}	
 	battleChoiceNumber = array_length(battleChoices);
-	
-	// Ready to choose
-	//battleChoicesAvailable = true;
 }
 
 // Iterate through each unit and add them to the turn order based on their swiftness
@@ -205,7 +202,7 @@ function getRandomTarget(targetList)
 		log("No foes remain");
 		return target;
 	}	
-	//log("Random target chosen: "+ string(target.name));
+
 	return target;
 }
 
@@ -233,8 +230,6 @@ function attackTarget(offense, defense, canBeCountered = true, isACounter = fals
 	// Increase defender's defense if they're defending
 	if defense.defending
 	{
-		//var defenseOriginal = defenseDefense;
-		//var techOriginal = defenseTech;
 		
 		// While defending, increase defense by 4 and then add defense from any shields, etc
 		defenseDefense += (2 + max(defense.weapon1.armorProtection, defense.weapon2.armorProtection)) * global.derivedStatMultiplier;
@@ -306,9 +301,19 @@ function attackTarget(offense, defense, canBeCountered = true, isACounter = fals
 			}
 			
 			// Apply the damage
+			var previousHitpoints = defense.hitpoints;
 			defense.hitpoints = max(defense.hitpoints - damageDealt, 0);
+			
+			// Proc on-damage passives
+			if checkUnitPassive(defense, "Berserker") && defense.endurance >= 1
+			{
+				defense.endurance -= 1;
+				defense.strength += 1;
+				calculateSubstats(noone, 1, defense);
+				log((defense.name) + "'s rage grows! Their endurance falls to " + (defense.endurance) + " and their strength grows to " + (defense.strength) + ".");
+			}
 
-			checkUnitKO(defense);
+			checkUnitKO(defense, previousHitpoints);
 
 		}	
 	}
@@ -388,11 +393,25 @@ function changePositions(unit, manualSwitch = true)
 }
 
 // See if a unit was knocked out and manage it
-function checkUnitKO(unit)
+function checkUnitKO(unit, previousHitpoints)
 {
 	if unit.hitpoints <= 0
 	{
+		
+		// Allies who would be knocked out check "lastStandChance" to see if they retain 1 hitpoint
+		if unit.alignment = Alignment.Friend && previousHitpoints > 1 
+		{
+			var lastStandRoll = dieRoll(100);
+			if lastStandRoll <= unit.lastStandChance
+			{
+				unit.hitpoints = 1;
+				log(string(unit.name) + " waivers, but grits their teeth and clings to conciousness!");
+				exit;
+			}	
+		}
+		
 		log(string(unit.name) + " was knocked out!");
+		
 		// Make a unit with no hitpoints unselectable, unconcious, and remove them from the turn order
 		unit.concious = false;
 		unit.selectable = false;
@@ -441,7 +460,7 @@ function log(str)
 	show_debug_message(str);
 	
 	// Clear out old battle log entries
-	if array_length(global.battleLog)>24
+	if array_length(global.battleLog) > 24
 		array_resize(global.battleLog, 24);
 }
 
