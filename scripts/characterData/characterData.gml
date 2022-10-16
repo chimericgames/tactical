@@ -4,7 +4,7 @@ randomize();
 // Constants
 global.initialActionDelay = 5; // The delay at the start of combat
 global.menuDelay = 2; // The delay after selecting a unit's action
-global.actionDelay = 30; // Delay after actions
+global.actionDelay = 45; // Delay after actions
 global.critDamage = 1.5;
 global.baseHitChance = .65;
 global.minHitChance = .05;
@@ -15,6 +15,13 @@ global.derivedStatMultiplier = 2; // Makes attack, defense, and hitpoints larger
 global.viciousCounterMult = 2;
 global.viciousCounterCritRateBonus = 25;
 
+// DOTs
+global.igniteDamage = 4;
+global.igniteDuration = 2;
+global.bleedDamage = 3;
+global.bleedDuration = 3;
+global.poisonDamage = 2;
+global.poisonDuration = 5;
 
 // Passive abilities
 global.passives =
@@ -1285,7 +1292,7 @@ global.characters =
 		weapon2Name : "Spiral Greathorns",
 		armor : global.armors.monsterArmorEvasion,
 		armorName : "Hirsuit Hide",
-		strength : 3,
+		strength : 4,
 		spirit : 1,
 		endurance : 7,
 		technique : 4,
@@ -1390,7 +1397,7 @@ global.enemies =
 		weapon2Name : "Piercing Teeth",
 		armor : global.armors.monsterArmorEvasion,
 		armorName : "",
-		strength : 6,
+		strength : 7,
 		spirit : 2, 
 		endurance : 3,
 		technique : 6,
@@ -1419,7 +1426,7 @@ global.enemies =
 		endurance : 2,
 		technique : 4,
 		swiftness : 4,
-		vitality : 4,
+		vitality : 3,
 		willpower : 2,
 		active : global.battleChoices.none,
 		passive : [ ],
@@ -1483,6 +1490,9 @@ function calculateSubstats(unitList = noone, unitCount = 0, specificUnit = false
 			character.defending = false;
 			character.concious = true;
 			character.selectable = true;
+			character.igniteTurns = 0;
+			character.bleedTurns = 0;
+			character.poisonTurns = 0;
 		}	
 	}
 }

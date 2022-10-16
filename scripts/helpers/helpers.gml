@@ -34,20 +34,15 @@ function getWeaponRange(character = noone)
 	return weaponName;
 }
 
-function swapWeapons(character = noone)
+function swapWeapons(unit = noone)
 {
-	var oldWeaponName = character.activeWeaponName;
-	if character.equippedWeapon == 1
-		character.equippedWeapon = 2;
-	else if character.equippedWeapon == 2
-		character.equippedWeapon = 1;
-	character.range = getWeaponRange(character);
-	character.attack = calculateAttack(character);
-	character.weaponHits = calculateWeaponHits(character);
-	character.critChance = calculateWeaponCritChance(character);
-	character.penetration = calculateWeaponPenetration(character);
-	character.activeWeaponName = getWeaponName(character);
-	log(string(activeCharacter.name) + " switches from their " + string(oldWeaponName) + " to their " + string(character.activeWeaponName) + ".");
+	var oldWeaponName = unit.activeWeaponName;
+	if unit.equippedWeapon == 1
+		unit.equippedWeapon = 2;
+	else if unit.equippedWeapon == 2
+		unit.equippedWeapon = 1;
+	calculateSubstats(noone, 1, unit);
+	log(string(unit.name) + " switches from their " + string(oldWeaponName) + " to their " + string(unit.activeWeaponName) + ".");
 }
 
 function calculateAttack(character = noone)
@@ -218,8 +213,53 @@ function checkUnitPassive(unit, passiveName)
 	}
 }
 
+function actionAttack(unit, applyStatus = noone)
+{
+	var targetEnemy = actionQueue[battleIndex,2];
+		
+	// Attack the enemy if its alive
+	if targetEnemy != noone && targetEnemy.concious
+	{
+		attackTarget(unit, targetEnemy,,,applyStatus);
+		log("");
+		actionCountdown = global.actionDelay;
+	}
+	
+	// Choose a new target and then attack if it isn't
+	else
+	{
+		if targetEnemy == noone
+			log(string(unit.name) + " has no target. They choose a new target to attack...");
+		if !targetEnemy.concious
+			log(string(targetEnemy.name) + " is already down, so " + string(unit.name) + " chooses a new target to attack...");
+		var targetEnemy = getTarget(unit);
+		attackTarget(unit, targetEnemy,,,applyStatus);
+		log("");
+		actionCountdown = global.actionDelay;				
+	}
+}	
+
+// Deal any sort of damage (after reductions)
+function dealDamage(unit, damageDealt)
+{
+		// Apply the damage
+		var previousHitpoints = unit.hitpoints;
+		unit.hitpoints = max(unit.hitpoints - damageDealt, 0);
+			
+		// Proc on-damage passives
+		if checkUnitPassive(unit, "Berserker") && unit.endurance >= 1
+		{
+			unit.endurance -= 1;
+			unit.strength += 1;
+			calculateSubstats(noone, 1, unit);
+			log((unit.name) + "'s rage grows! Their endurance falls to " + string(unit.endurance) + " and their strength grows to " + string(unit.strength) + ".");
+		}
+
+		checkUnitKO(unit, previousHitpoints);		
+}
+
 // Attack target
-function attackTarget(offense, defense, canBeCountered = true, isACounter = false)
+function attackTarget(offense, defense, canBeCountered = true, isACounter = false, applyStatus = noone)
 {	
 	
 	var offenseDamage = offense.attack;
@@ -300,20 +340,16 @@ function attackTarget(offense, defense, canBeCountered = true, isACounter = fals
 				log(string(offense.name) + " attacks " + string(defense.name) + " with their " + string(offense.activeWeaponName) + " and connects, dealing " + string(damageDealt) + " damage. (" + string(offenseDamage) + " - " + string(defenseAdjusted) + ")");
 			}
 			
-			// Apply the damage
-			var previousHitpoints = defense.hitpoints;
-			defense.hitpoints = max(defense.hitpoints - damageDealt, 0);
-			
-			// Proc on-damage passives
-			if checkUnitPassive(defense, "Berserker") && defense.endurance >= 1
-			{
-				defense.endurance -= 1;
-				defense.strength += 1;
-				calculateSubstats(noone, 1, defense);
-				log((defense.name) + "'s rage grows! Their endurance falls to " + (defense.endurance) + " and their strength grows to " + (defense.strength) + ".");
-			}
+			// Apply the damage and proc on-damage passives and effects
+			dealDamage(defense, damageDealt);
 
-			checkUnitKO(defense, previousHitpoints);
+			switch(applyStatus)
+			{
+				case "Ignite":
+				defense.igniteTurns = global.igniteDuration;
+				log(string(offense.name) + "'s attacks ignites " + string(defense.name) +"!");
+				break;
+			}	
 
 		}	
 	}

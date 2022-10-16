@@ -91,6 +91,7 @@ function inputControl()
 			battleChoice = battleChoices[mousePos];
 			switch(battleChoice.name)
 			{
+				
 				case "Attack": 
 					var targetEnemy = getTarget(activeCharacter);
 					if targetingEnemy != true
@@ -107,6 +108,7 @@ function inputControl()
 						advanceTurn();
 					}	
 					break;
+					
 				case "Defend":
 					log(string(activeCharacter.name) + " takes a defensive stance...");
 					activeCharacter.defending = true;
@@ -114,17 +116,38 @@ function inputControl()
 					actionCountdown = global.menuDelay;
 					advanceTurn();
 					break;
+					
 				case "Swap Weapons": 
 					swapWeapons(activeCharacter);	// This does not end the turn
 					break;
+					
 				case "Position": 
 					changePositions(activeCharacter, true);
 					queueAction("Position");
 					actionCountdown = global.menuDelay;
 					advanceTurn();
 					break;
+					
 				case "Retreat":
 					break;
+					
+				case "Ignite": 
+					var targetEnemy = getTarget(activeCharacter);
+					if targetingEnemy != true
+					{
+						activeEnemy = targetEnemy;
+						if targetEnemy != noone
+						{
+							queueAction("Ignite", targetEnemy);
+						}
+						else		
+							exit;
+						log(string(activeCharacter.name) + " prepares to ignite the " + string(targetEnemy.name) + ".");
+						actionCountdown = global.menuDelay;
+						advanceTurn();
+					}	
+					break;					
+					
 			}
 		}
 	}
@@ -132,13 +155,28 @@ function inputControl()
 	// Manual enemy attack targeting
 	else if targetingEnemy
 	{
-		if mouse_check_button_pressed(mb_left) && battleChoice.name == "Attack" && targetPositionEnemy != -1
+				
+		if mouse_check_button_pressed(mb_left) && targetPositionEnemy != -1
 		{
 			var targetEnemy = enemyPositions[targetPositionEnemy];
-			queueAction("Attack", targetEnemy);
-			log(string(activeCharacter.name) + " prepares to attack the " + string(targetEnemy.name) + ".");			
-			actionCountdown = global.menuDelay;
-			advanceTurn(); 		
+		
+			switch(battleChoice.name)
+			{
+				
+				case "Attack": 			
+				queueAction("Attack", targetEnemy);
+				log(string(activeCharacter.name) + " prepares to attack the " + string(targetEnemy.name) + ".");			
+				actionCountdown = global.menuDelay;
+				advanceTurn();
+				break;
+				
+				case "Ignite": 			
+				queueAction("Ignite", targetEnemy);
+				log(string(activeCharacter.name) + " prepares to ignite the " + string(targetEnemy.name) + ".");			
+				actionCountdown = global.menuDelay;
+				advanceTurn();
+				break;				
+			}
 		}
 	}
 	

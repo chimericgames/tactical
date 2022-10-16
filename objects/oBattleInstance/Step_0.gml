@@ -21,6 +21,14 @@ if battleStart
 	
 	var unit = actionQueue[battleIndex,0];
 	
+	// Upkeep phase. Resolve DOTs and other things before the turn plays out
+	if unit.igniteTurns > 0
+	{
+		unit.igniteTurns --;
+		dealDamage(unit, global.igniteDamage);
+		log(unit.name + " burns, taking " + string(global.igniteDamage) + " damage.");
+	}
+	
 	// Perform the action if still concious
 	if unit.concious
 	{
