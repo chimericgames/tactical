@@ -10,6 +10,14 @@ function inputControl()
 		firstTurnInitialized = true;
 	}
 
+		if mouse_check_button_pressed(mb_right)
+		{
+			if checkUnitPassive(global.characters.sigrid, global.passives.viciousCounter)
+			{
+				log("Vicious Counter skill improves crit chance and doubles the damage!");
+			}
+		}
+
 	// Controls only work during the player turn
 	if !playerTurn
 		exit;

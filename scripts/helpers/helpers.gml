@@ -210,13 +210,13 @@ function getRandomTarget(targetList)
 }
 
 // Return true if a unit has a particular passive
-function checkUnitPassive(unit, passive)
+function checkUnitPassive(unit, passiveName)
 {
 	var passivesCount = array_length(unit.passive);
 	for (var i = 0; i < passivesCount; i++) 
 	{
 		var passiveToCheck = unit.passive[i];
-		if passiveToCheck == passive
+		if passiveToCheck.name == passiveName
 			return 1;
 	}
 }
@@ -249,6 +249,9 @@ function attackTarget(offense, defense, canBeCountered = true, isACounter = fals
 	if hit
 	{		
 		
+		// Attack bonuses from passives
+		var critChanceBonus = 0;
+		
 		// Attack a number of times
 		var weaponHits = offense.weaponHits;
 		repeat(weaponHits)
@@ -261,19 +264,19 @@ function attackTarget(offense, defense, canBeCountered = true, isACounter = fals
 			// Viscious Counter passive
 			if isACounter
 			{
-				// TODO: This does not work
-				if checkUnitPassive(offense, global.passives.viciousCounter)
+				if checkUnitPassive(offense, "Vicious Counter")
 				{
 					offenseDamage *= global.viciousCounterMult;	
+					var critChanceBonus = global.viciousCounterCritRateBonus;
 					log(string(offense.name) + "'s Vicious Counter skill doubles the damage!");
 				}
 			}
 		
 			// See if the hit is a crit
 			var critRoll = dieRoll();
-			var critChance = calculateWeaponCritChance(offense);
+			var critChance = calculateWeaponCritChance(offense) + critChanceBonus;
 			show_debug_message(string(offense.name) + "'s crit roll: " + string(critRoll) + " / " + string(critChance)+"%");
-			var crit = critRoll<=critChance
+			var crit = critRoll <= critChance
 			if crit 
 			{
 				show_debug_message(string(offense.name) + " crits!");
@@ -623,7 +626,7 @@ function enemyTurn(unit = activeCharacter)
 			}	
 			
 			queueAction("Attack", targetEnemy);
-			log(string(unit.name) + " chooses their action.")	
+			//log(string(unit.name) + " chooses their action.")	
 			
 			// Advance the turn
 			actionCountdown = global.menuDelay;

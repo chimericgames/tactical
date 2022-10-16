@@ -12,6 +12,9 @@ global.swiftnessVariance = 1.5; // Slightly randomizes turn order
 global.battleLog = [];
 global.gameOver = false;
 global.derivedStatMultiplier = 2; // Makes attack, defense, and hitpoints larger for ease of use and interest
+global.viciousCounterMult = 2;
+global.viciousCounterCritRateBonus = 25;
+
 
 // Passive abilities
 global.passives =
