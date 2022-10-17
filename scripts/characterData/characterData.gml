@@ -20,8 +20,7 @@ global.igniteDamage = 4;
 global.igniteDuration = 2;
 global.bleedDamage = 3;
 global.bleedDuration = 3;
-global.poisonDamage = 2;
-global.poisonDuration = 5;
+global.poisonStacks = 1;
 
 // Passive abilities
 global.passives =
@@ -50,12 +49,22 @@ global.passives =
 	{
 		name : "Sharp Reflexes",
 		description : "",
-	},			
+	},
+	winnower :
+	{
+		name : "Winnower",
+		description : "",
+	},		
 	perniciousHorticulturist :
 	{
 		name : "Pernicious Horticulturist",
-		description : "Poison items have a 50% chance to not consume a charge when used. Poisoned targets are also enfeebled.",
-	},				
+		description : "Poison items have a 50% chance to not consume a charge when used. Ally's poison ailments gain an additional stack when affecting unpoisoned targets.",
+	},		
+	noxiousBloom :
+	{
+		name : "Noxious Bloom",
+		description : "This unit's critical hits against poisoned enemies trigger Noxious Bloom on them. Noxious bloom consumes all poison stacks, deals that much true damage, and then divides that many poison stacks amongst surrounding enemies." // Always round up?
+	},		
 	beguiling :
 	{
 		name : "Beguiling",
@@ -179,15 +188,7 @@ global.items =
 		charges : 4,
 		isBattleChoice : true,
 	},
-	
-	wineSkin :
-	{
-		name : "Enchanted Wineskin",
-		description : "",
-		charges : infinity,
-		isBattleChoice : true,
-	},
-	
+
 	shatteredShackles :
 	{
 		name : "Shattered Shackles",
@@ -228,7 +229,15 @@ global.items =
 		isBattleChoice : true,
 	},
 	
-	nectarUnguent :
+	vipersVenom :
+	{
+		name : "Viper's Venom",
+		description : "",
+		charges : 4,
+		isBattleChoice : true,
+	},	
+
+nectarUnguent :
 	{
 		name : "Nectar Unguent",
 		description : "",
@@ -292,18 +301,10 @@ global.items =
 		isBattleChoice : false,
 	},
 	
-	greathartReigns :
-	{
-		name : "greathartReigns",
-		description : "Restores 1 hp per combat turn. Doubles the chances of resisting being downed once per battle.",
-		charges : -1,
-		isBattleChoice : false,
-	},
-	
 	broadheadQuiver :	// Acatl makes these 30% of the time
 	{
 		name : "Broadhead Arrow Quiver",
-		description : "A quiver containing specialized arrows designed for bleeding out big game.", // +1 damage, +2 bleeding
+		description : "A quiver containing specialized arrows designed for bleeding out big game.", // +1 damage, +.2 bleed
 		charges : 6,
 		isBattleChoice : false,
 	},
@@ -311,7 +312,7 @@ global.items =
 	poisonedQuiver :	// Acatl makes these 20% of the time
 	{
 		name : "Poisoned Arrow Quiver",
-		description : "A quiver containing specialized arrows designed to deliver a fast-acting poison.", // +4 poison
+		description : "A quiver containing specialized arrows designed to deliver a fast-acting poison.", // Apply poison stacks
 		charges : 6,
 		isBattleChoice : false,
 	},
@@ -319,7 +320,7 @@ global.items =
 	incendiaryQuiver :	// Acatl makes these 20% of the time
 	{
 		name : "Incendiary Arrow Quiver",
-		description : "A quiver containing specialized arrows designed to be ignited.", // +4 fire
+		description : "A quiver containing specialized arrows designed to be ignited.", 
 		charges : 6,
 		isBattleChoice : false,
 	},
@@ -327,7 +328,7 @@ global.items =
 	bodkinQuiver :	// Acatl makes these 20% of the time
 	{
 		name : "Bodkin Arrow Quiver",
-		description : "A quiver containing specialized arrows designed to penetrate light armor.", // +2 penetration
+		description : "A quiver containing specialized arrows designed to penetrate light armor.", // +.2 penetration
 		charges : 6,
 		isBattleChoice : false,
 	},
@@ -335,7 +336,7 @@ global.items =
 	explosiveQuiver :	// Acatl makes these 10% of the time
 	{
 		name : "Bodkin Arrow Quiver",
-		description : "A quiver containing specialized arrows designed to penetrate light armor.", // +2 penetration
+		description : "A quiver containing specialized arrows designed to penetrate light armor.", // Deals added fire damage
 		charges : 6,
 		isBattleChoice : false,
 	},		
@@ -415,7 +416,7 @@ global.battleChoices =
 	{
 		name : "Harry",
 		manaCost : 1,
-		description : "",		
+		description : "Attacks a front-row target, changes positions with an adjacent ally, then attacks a random back-row target",
 	},
 	tailWind :
 	{
@@ -467,8 +468,8 @@ global.weaponProperties =
 		damage : 0,
 		crit : 0,
 		wieldiness : .5,
-		penetration : 0,
-		bleed : 2,
+		penetration : -.1,
+		bleed : .25,
 		stun : 0,
 		range : 0,
 		hits : 0,
@@ -483,7 +484,7 @@ global.weaponProperties =
 		crit : .5,
 		wieldiness : 1,
 		penetration : 0,
-		bleed : 1,
+		bleed : .1,
 		stun : 0,
 		range : 0,
 		hits : 0,
@@ -498,7 +499,7 @@ global.weaponProperties =
 		crit : 0,
 		wieldiness : -1,
 		penetration : .1,
-		bleed : 0,
+		bleed : .5,
 		stun : .5,
 		range : 0,
 		hits : 0,
@@ -513,7 +514,7 @@ global.weaponProperties =
 		crit : -1,
 		wieldiness : 0,
 		penetration : .25,
-		bleed : -1,
+		bleed : 0,
 		stun : 1,
 		range : 0,
 		hits : 0,
@@ -685,6 +686,21 @@ global.weaponProperties =
 		encumbrance : 0,
 		armorProtection : 0,
 		elementalProtection : 0,			
+	},
+	
+	spiked:
+	{
+		damage : -1,
+		crit : 0,
+		wieldiness : 0,
+		penetration : 0,
+		bleed : .15,
+		stun : 0,
+		range : 0,
+		hits : 0,
+		encumbrance : 0,
+		armorProtection : 0,
+		elementalProtection : 0,			
 	},	
 	
 // Shield -3 damage, -2 crit, +2 armor, +2 elemental protection
@@ -750,6 +766,11 @@ global.weapons =
 	{
 		tags : [ global.weaponProperties.crushing ],
 	},		
+
+	flail : 
+	{
+		tags : [ global.weaponProperties.crushing, global.weaponProperties.spiked ],
+	},
 		
 	eztli : // Eztli is a trained microraptor
 	{
@@ -771,6 +792,11 @@ global.weapons =
 		tags : [ global.weaponProperties.piercing, global.weaponProperties.missile, global.weaponProperties.large ],
 	},
 	
+	ridingFlail : 
+	{
+		tags : [ global.weaponProperties.crushing, global.weaponProperties.large, global.weaponProperties.spiked ],
+	},	
+	
 	greatBow :
 	{
 		tags : [ global.weaponProperties.piercing, global.weaponProperties.missile, global.weaponProperties.great ],
@@ -784,11 +810,16 @@ global.weapons =
 	greatMace : 
 	{
 		tags : [ global.weaponProperties.crushing, global.weaponProperties.great ],
-	},	
+	},
 	
 	greatAxe : 
 	{
 		tags : [ global.weaponProperties.splitting, global.weaponProperties.great ],
+	},	
+	
+	greatSpear :
+	{
+		tags : [ global.weaponProperties.piercing, global.weaponProperties.pole, global.weaponProperties.great ],
 	},	
 	
 	shortSwords : 
@@ -819,7 +850,12 @@ global.weapons =
 	bolas : 
 	{
 		tags : [ global.weaponProperties.crushing, global.weaponProperties.small, global.weaponProperties.thrownLight, global.weaponProperties.disabling ],
-	},	
+	},
+	
+	javelin :
+	{
+		tags : [ global.weaponProperties.piercing, global.weaponProperties.pole, global.weaponProperties.thrownHeavy ],
+	},
 
 	mediumShield : 
 	{
@@ -871,10 +907,12 @@ calculateWeaponStats(global.weapons.spear);
 calculateWeaponStats(global.weapons.axe);
 calculateWeaponStats(global.weapons.poleAxe);
 calculateWeaponStats(global.weapons.mace);
+calculateWeaponStats(global.weapons.flail);
 calculateWeaponStats(global.weapons.eztli);
 calculateWeaponStats(global.weapons.shortbow);
 calculateWeaponStats(global.weapons.recurveBow);
 calculateWeaponStats(global.weapons.longbow);
+calculateWeaponStats(global.weapons.ridingFlail);
 calculateWeaponStats(global.weapons.greatBow);
 calculateWeaponStats(global.weapons.greatSword);
 calculateWeaponStats(global.weapons.greatMace);
@@ -1063,41 +1101,39 @@ global.characters =
 		huntingGathering : Skill.Decent,
 		cooking : Skill.Decent,
 		adventurePassive : [],
-		//protects : [],
+		protects : [],
 	},
 	
-	ceres :
+	willow :
 	{
-		name : "Ceres",
-		race : "Centaur",
+		name : "Willow", // Considered: Acacia, Maia, Chloe. Maybe this should be more threatening
+		race : "Cervitaur",
 		alignment : Alignment.Friend,
 		size : Size.Large,
-		weapon1 : global.weapons.greatBow,
-		weapon1Name : "Great Bow",
-		weapon2 : global.weapons.greatMace,
-		weapon2Name : "Great Flail",
+		weapon1 : global.weapons.ridingFlail,
+		weapon1Name : "Ironwood Thorn-Flail",
+		weapon2 : global.weapons.javelin,
+		weapon2Name : "Barbed Javelin",
 		armor : global.armors.light,
-		armorName : "Stalker's Leathers",
-		strength : 6,
+		armorName : "Mist-Stalker's Barding",
+		strength : 5,
 		spirit : 3, 
-		endurance : 5,
-		technique : 5,
-		swiftness : 4,
-		vitality : 6,
+		endurance : 2,
+		technique : 7,
+		swiftness : 6,
+		vitality : 5,
 		willpower : 3,
-		active : global.battleChoices.deadeye,
-		passive : [ global.passives.predator, global.passives.sunderer ],
-		items : [ global.items.furyDraught, global.items.woad ],
+		active : global.battleChoices.harry,
+		passive : [ global.passives.noxiousBloom, global.passives.perniciousHorticulturist ],
+		items : [ global.items.vipersVenom, global.items.nectarUnguent ],
 		// Adventure skills
 		leadership : Skill.Poor,
 		scouting : Skill.Skilled,
-		huntingGathering : Skill.Skilled,
-		cooking : Skill.Decent,
+		huntingGathering : Skill.Masterful,
+		cooking : Skill.Skilled,
 		adventurePassive : [],
-		//protects : [],
+		protects : [ "Thistle" ],
 	},
-	
-	// Shelve ceres in favor of a poison-oriented cervitaur friend for thistle
 	
 	thistle :
 	{
@@ -1119,15 +1155,15 @@ global.characters =
 		vitality : 4,
 		willpower : 2,
 		active : global.battleChoices.thorns,
-		passive : [ global.passives.sharpReflexes, global.passives.perniciousHorticulturist ],
+		passive : [ global.passives.sharpReflexes, global.passives.winnower ],
 		items : [ global.items.witbaneToxin, global.items.nectarUnguent ],
 		// Adventure skills
 		leadership : Skill.Dismal,
 		scouting : Skill.Masterful,
 		huntingGathering : Skill.Skilled,
-		cooking : Skill.Decent,
+		cooking : Skill.Poor,
 		adventurePassive : [],		
-		//protects : [],
+		protects : [ "Willow" ],
 	},
 	
 	cassiel :
@@ -1158,7 +1194,7 @@ global.characters =
 		huntingGathering : Skill.Poor,
 		cooking : Skill.Skilled,
 		adventurePassive : [],
-		//protects : [],
+		protects : [],
 	},	
 	
 	citalli :
@@ -1189,7 +1225,7 @@ global.characters =
 		huntingGathering : Skill.Masterful,
 		cooking : Skill.Poor,
 		adventurePassive : [],		
-		//protects : [ global.characters.acatl ],
+		protects : [ "Citalli" ],
 	},		
 	
 	acatl :
@@ -1211,7 +1247,7 @@ global.characters =
 		swiftness : 4,
 		vitality : 4,
 		willpower : 3,
-		active : global.battleChoices.harry,
+		active : global.battleChoices.harry, // This is placeholder
 		passive : [ global.passives.falconer, global.passives.herbalist ],
 		items : [ global.items.falconryGauntlet , global.items.herbalBalm ],
 		// Adventure skills
@@ -1220,7 +1256,7 @@ global.characters =
 		huntingGathering : Skill.Skilled,
 		cooking : Skill.Masterful,
 		adventurePassive : [ global.adventurePassives.fletcher ],
-		//protects : [], // His pet
+		protects : [], // His pet
 	},
 	
 	/* I need a monster for Acatl
@@ -1276,7 +1312,7 @@ global.characters =
 		huntingGathering : Skill.Skilled,
 		cooking : Skill.Catastrophic,
 		adventurePassive : [ global.adventurePassives.overwatch ],
-		//protects : [ global.characters.alkimos ],
+		protects : [ "Alkimos" ],
 	},
 	
 	alkimos : // Berserker-poet satyr and lifelong friend of the harpy, Demi
@@ -1301,14 +1337,14 @@ global.characters =
 		willpower : 5,
 		active : global.battleChoices.batteringRam,
 		passive : [ global.passives.berserker, global.passives.pulverize ],
-		items : [ global.items.wineSkin, global.items.shatteredShackles ],	// Alkimos' shackles are detrimental to technique and need to be removed by a smith
+		items : [ global.items.furyDraught, global.items.shatteredShackles ],	// Alkimos' shackles are detrimental to technique and need to be removed by a smith
 		// Adventure skills
 		leadership : Skill.Decent,
 		scouting : Skill.Skilled,
 		huntingGathering : Skill.Skilled,
 		cooking : Skill.Poor,
 		adventurePassive : [ global.adventurePassives.rousingVerse ],		
-		//protects : [ global.characters.demi ],
+		protects : [ "Demi" ],
 	},
 
 	helle : // Megaloceros-mounted highland seidr worker
@@ -1341,7 +1377,7 @@ global.characters =
 		huntingGathering : Skill.Skilled,
 		cooking : Skill.Skilled,
 		adventurePassive : [ global.adventurePassives.fateWeaver ],		
-		//protects : [  ],
+		protects : [  ],
 	},
 
 	ilse :
@@ -1372,13 +1408,13 @@ global.characters =
 		huntingGathering : Skill.Poor,
 		cooking : Skill.Poor,
 		adventurePassive : [ global.adventurePassives.inspirational ],		
-		//protects : [  ],
+		protects : [  ],
 	},
 
 };
 
 // Create a list of characters
-global.characterList = [ global.characters.sigrid, global.characters.ceres, global.characters.thistle, global.characters.cassiel, global.characters.citalli, global.characters.acatl, global.characters.demi, global.characters.alkimos, global.characters.helle, global.characters.ilse ];
+global.characterList = [ global.characters.sigrid, global.characters.willow, global.characters.thistle, global.characters.cassiel, global.characters.citalli, global.characters.acatl, global.characters.demi, global.characters.alkimos, global.characters.helle, global.characters.ilse ];
 global.characterCount = array_length(global.characterList);
 
 // Enemies
@@ -1492,7 +1528,6 @@ function calculateSubstats(unitList = noone, unitCount = 0, specificUnit = false
 			character.selectable = true;
 			character.igniteTurns = 0;
 			character.bleedTurns = 0;
-			character.poisonTurns = 0;
 		}	
 	}
 }
