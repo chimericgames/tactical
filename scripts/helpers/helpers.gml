@@ -81,6 +81,24 @@ function calculateWeaponPenetration(character = noone)
 	return penetration;
 }
 
+function calculateWeaponBleed(character = noone)
+{
+	if character.equippedWeapon == 1
+		var bleed = character.weapon1.bleed;
+	else if character.equippedWeapon == 2
+		var bleed = character.weapon2.bleed;
+	return bleed;
+}
+
+function calculateWeaponStun(character = noone)
+{
+	if character.equippedWeapon == 1
+		var stun = character.weapon1.stun;
+	else if character.equippedWeapon == 2
+		var stun = character.weapon2.stun;
+	return stun;
+}
+
 // Weapon defense (shields, etc) used to factor directly into defense, but I want it to only do so while blocking
 function calculateDefense(character = noone)
 {
@@ -309,7 +327,7 @@ function attackTarget(offense, defense, canBeCountered = true, isACounter = fals
 		
 			// See if the hit is a crit
 			var critRoll = dieRoll();
-			var critChance = calculateWeaponCritChance(offense) + critChanceBonus;
+			var critChance = calculateWeaponCritChance(offense) + critChanceBonus; // TODO: Isn't this already calculated?
 			show_debug_message(string(offense.name) + "'s crit roll: " + string(critRoll) + " / " + string(critChance)+"%");
 			var crit = critRoll <= critChance
 			if crit 
@@ -343,9 +361,19 @@ function attackTarget(offense, defense, canBeCountered = true, isACounter = fals
 			// Apply the damage and proc on-damage passives and effects
 			dealDamage(defense, damageDealt);
 
+			// Status applied from innate weapon chance
+			var bleedRoll = dieRoll();
+			if bleedRoll < offense.bleed
+			{
+				defense.bleedTurns = global.bleedDuration;
+				log(string(offense.name) + "'s attack cuts " + string(defense.name) + " deep!");			
+			}
+
+			// Status applied always (usually from items)
 			if offense.alwaysApplyPoison
 				applyStatus = "Poison";
 
+			// Status applied from active abilities
 			switch(applyStatus)
 			{
 				case "Ignite":
@@ -354,6 +382,8 @@ function attackTarget(offense, defense, canBeCountered = true, isACounter = fals
 				break;
 				
 				case "Poison":
+				if checkUnitPassive(offense, "Pernicious Horticulturist") && defense.poisonStacks <= 0 // TODO: This should be a partywide passive check
+						defense.poisonStacks += 1;
 				defense.poisonStacks += 2;
 				log(string(offense.name) + "'s attack poisons " + string(defense.name) + "!");
 				break;

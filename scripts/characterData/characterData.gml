@@ -58,7 +58,7 @@ global.passives =
 	perniciousHorticulturist :
 	{
 		name : "Pernicious Horticulturist",
-		description : "Poison items have a 50% chance to not consume a charge when used. Ally's poison ailments gain an additional stack when affecting unpoisoned targets.",
+		description : "Poison items have a 50% chance to not consume a charge when used. Ally's poison ailments deal an additional poison stack to unpoisoned targets.",
 	},		
 	noxiousBloom :
 	{
@@ -469,7 +469,7 @@ global.weaponProperties =
 		crit : 0,
 		wieldiness : .5,
 		penetration : -.1,
-		bleed : .25,
+		bleed : 25,
 		stun : 0,
 		range : 0,
 		hits : 0,
@@ -484,7 +484,7 @@ global.weaponProperties =
 		crit : .5,
 		wieldiness : 1,
 		penetration : 0,
-		bleed : .1,
+		bleed : 10,
 		stun : 0,
 		range : 0,
 		hits : 0,
@@ -499,8 +499,8 @@ global.weaponProperties =
 		crit : 0,
 		wieldiness : -1,
 		penetration : .1,
-		bleed : .5,
-		stun : .5,
+		bleed : 5,
+		stun : 5,
 		range : 0,
 		hits : 0,
 		encumbrance : 0,
@@ -515,7 +515,7 @@ global.weaponProperties =
 		wieldiness : 0,
 		penetration : .25,
 		bleed : 0,
-		stun : 1,
+		stun : 10,
 		range : 0,
 		hits : 0,
 		encumbrance : 0,
@@ -590,7 +590,7 @@ global.weaponProperties =
 		wieldiness : 0,
 		penetration : 0,
 		bleed : 0,
-		stun : -1,
+		stun : -10,
 		range : 0,
 		hits : 0,
 		encumbrance : 1,
@@ -605,7 +605,7 @@ global.weaponProperties =
 		wieldiness : 0,
 		penetration : 0,
 		bleed : 0,
-		stun : -.5,
+		stun : -5,
 		range : 0,
 		hits : 0,
 		encumbrance : .5,
@@ -620,7 +620,7 @@ global.weaponProperties =
 		wieldiness : -.5,
 		penetration : .05,
 		bleed : 0,
-		stun : .5,
+		stun : 5,
 		range : 0,
 		hits : 0,
 		encumbrance : -.5,
@@ -635,7 +635,7 @@ global.weaponProperties =
 		wieldiness : -1,
 		penetration : .1,
 		bleed : 0,
-		stun : 1,
+		stun : 10,
 		range : 0,
 		hits : 0,
 		encumbrance : -1,
@@ -680,7 +680,7 @@ global.weaponProperties =
 		wieldiness : 0,
 		penetration : 0,
 		bleed : 0,
-		stun : 1.5,
+		stun : 15,
 		range : 0,
 		hits : 0,
 		encumbrance : 0,
@@ -694,7 +694,7 @@ global.weaponProperties =
 		crit : 0,
 		wieldiness : 0,
 		penetration : 0,
-		bleed : .15,
+		bleed : 15,
 		stun : 0,
 		range : 0,
 		hits : 0,
@@ -922,6 +922,7 @@ calculateWeaponStats(global.weapons.dagger);
 calculateWeaponStats(global.weapons.combatKnives);
 calculateWeaponStats(global.weapons.thrownBlade);
 calculateWeaponStats(global.weapons.thrownAxe);
+calculateWeaponStats(global.weapons.javelin);
 calculateWeaponStats(global.weapons.bolas);
 
 // Armors
@@ -1111,7 +1112,7 @@ global.characters =
 		alignment : Alignment.Friend,
 		size : Size.Large,
 		weapon1 : global.weapons.ridingFlail,
-		weapon1Name : "Ironwood Thorn-Flail",
+		weapon1Name : "Ironwood Thorned Flail",
 		weapon2 : global.weapons.javelin,
 		weapon2Name : "Barbed Javelin",
 		armor : global.armors.light,
@@ -1516,6 +1517,8 @@ function calculateSubstats(unitList = noone, unitCount = 0, specificUnit = false
 		character.weaponHits = calculateWeaponHits(character);
 		character.critChance = calculateWeaponCritChance(character);
 		character.penetration = calculateWeaponPenetration(character);
+		character.bleed = calculateWeaponBleed(character);
+		character.stun = calculateWeaponStun(character);
 		character.maxHitpoints = calculateHitpoints(character);
 		character.defense = calculateDefense(character);
 		character.resistance = calculateResistance(character);
