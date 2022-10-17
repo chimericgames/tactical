@@ -343,12 +343,25 @@ function attackTarget(offense, defense, canBeCountered = true, isACounter = fals
 			// Apply the damage and proc on-damage passives and effects
 			dealDamage(defense, damageDealt);
 
+			if offense.alwaysApplyPoison
+				applyStatus = "Poison";
+
 			switch(applyStatus)
 			{
 				case "Ignite":
 				defense.igniteTurns = global.igniteDuration;
-				log(string(offense.name) + "'s attacks ignites " + string(defense.name) +"!");
+				log(string(offense.name) + "'s attack ignites " + string(defense.name) + "!");
 				break;
+				
+				case "Poison":
+				defense.poisonStacks += 2;
+				log(string(offense.name) + "'s attack poisons " + string(defense.name) + "!");
+				break;
+				
+				case "Bleed":
+				defense.bleedTurns = global.bleedDuration;
+				log(string(offense.name) + "'s attack cuts " + string(defense.name) + " deep!");
+				break;				
 			}	
 
 		}	
@@ -496,8 +509,8 @@ function log(str)
 	show_debug_message(str);
 	
 	// Clear out old battle log entries
-	if array_length(global.battleLog) > 24
-		array_resize(global.battleLog, 24);
+	if array_length(global.battleLog) > 40
+		array_resize(global.battleLog, 40);
 }
 
 // Advance the turn and populate battle choices for player characters
@@ -748,7 +761,7 @@ function structCopy(src)
 // Define unit positions
 function defineUnitPositions()
 {
-	var unitXPos=250;
+	var unitXPos=350;
 	var unitYPos=350;
 	var enemySeparation=-150
 	var unitRankSeparation=250;

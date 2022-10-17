@@ -148,6 +148,22 @@ function inputControl()
 					}	
 					break;					
 					
+				case "Viper's Venom":
+					activeCharacter.alwaysApplyPoison = true;
+					queueAction("Viper's Venom");
+					log(string(activeCharacter.name) + " coats their weapons with Viper's Venom.");
+					actionCountdown = global.menuDelay;
+					advanceTurn();				
+					break;
+					
+				case "Witbane Toxin":
+					activeCharacter.alwaysApplyPoison = true;
+					queueAction("Witbane Toxin");
+					log(string(activeCharacter.name) + " coats their weapons with Witbane Toxin");
+					actionCountdown = global.menuDelay;
+					advanceTurn();				
+					break;					
+					
 			}
 		}
 	}

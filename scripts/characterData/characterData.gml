@@ -1528,6 +1528,10 @@ function calculateSubstats(unitList = noone, unitCount = 0, specificUnit = false
 			character.selectable = true;
 			character.igniteTurns = 0;
 			character.bleedTurns = 0;
+			character.poisonStacks = 0;
+			character.alwaysApplyPoison = false;
+			character.alwaysApplyIgnite = false;
+			character.alwaysApplyBleed = false;
 		}	
 	}
 }

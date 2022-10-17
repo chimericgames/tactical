@@ -22,11 +22,29 @@ if battleStart
 	var unit = actionQueue[battleIndex,0];
 	
 	// Upkeep phase. Resolve DOTs and other things before the turn plays out
+	
+	// Ignite
 	if unit.igniteTurns > 0
 	{
-		unit.igniteTurns --;
 		dealDamage(unit, global.igniteDamage);
 		log(unit.name + " burns, taking " + string(global.igniteDamage) + " damage.");
+		unit.igniteTurns --;
+	}
+	
+	// Bleed
+	if unit.bleedTurns > 0
+	{
+		dealDamage(unit, global.bleedDamage);
+		log(unit.name + " bleeds, taking " + string(global.bleedDamage) + " damage.");
+		unit.bleedTurns --;
+	}	
+	
+	// Poison
+	if unit.poisonStacks > 0
+	{
+		dealDamage(unit, global.poisonStacks);
+		log(unit.name + " is poisoned and takes " + string(unit.poisonStacks) + " damage.");
+		unit.poisonStacks --;
 	}
 	
 	// Perform the action if still concious
@@ -63,7 +81,6 @@ if battleStart
 		firstTurnInitialized = false;
 		
 		// Announce the new round
-		log("");
 		log("NEW ROUND.");
 		log("");
 	}

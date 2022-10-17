@@ -50,7 +50,7 @@ if playerTurn && !battleStart
 var battleLogSize = array_length(global.battleLog);
 for (var i=0; i<battleLogSize; i++)
 {
-	draw_set_alpha(1.25-.05 * i);
+	draw_set_alpha(2 - .05 * i);
 	draw_text(menuX,window_get_height()-leading*(i+2),string(global.battleLog[i])); ii++;
 	draw_set_alpha(1);
 }
