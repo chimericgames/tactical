@@ -57,6 +57,7 @@ if playerTurn && !battleStart
 				var unitY = global.enemyXYPositions[i, 1];
 				draw_rectangle(unitX,unitY-selectUnitBoxHeight/2,unitX+selectUnitBoxWidth,unitY+selectUnitBoxHeight,true);
 			}
+			draw_set_alpha(1);
 			
 			// Draw the active enemy targeting box	
 			if targetPositionEnemy > 0
@@ -74,9 +75,37 @@ if playerTurn && !battleStart
 			var selectionX = global.partyXYPositions[targetPositionPlayer, 0]-selectUnitBoxWidth/2;
 			var selectionY = global.partyXYPositions[targetPositionPlayer, 1];
 			draw_rectangle(selectionX,selectionY-selectUnitBoxHeight/2,selectionX+selectUnitBoxWidth,selectionY+selectUnitBoxHeight,true);
-		}
-			
+		}			
 	}	
+}
+
+// Draw player and enemy health bars
+for (var i = 1; i <= 6; ++i) 
+{
+	
+	// Enemy bars
+	draw_set_alpha(.375);
+	var unitX = global.enemyXYPositions[i, 0]-selectUnitBoxWidth/2;
+	var unitY = global.enemyXYPositions[i, 1];
+	// Health bar border
+	draw_rectangle(unitX,unitY+selectUnitBoxHeight-3,unitX+selectUnitBoxWidth,unitY+selectUnitBoxHeight,true);
+	// Health bar fill
+	draw_set_alpha(1);
+	var unit = enemyPositions[i];
+	var unitHealth = unit.hitpoints / unit.maxHitpoints;
+	draw_rectangle(unitX,unitY+selectUnitBoxHeight-3,unitX+selectUnitBoxWidth*unitHealth,unitY+selectUnitBoxHeight,false);
+	
+	// Player bars
+	draw_set_alpha(.375);
+	var unitX = global.partyXYPositions[i, 0]-selectUnitBoxWidth/2;
+	var unitY = global.partyXYPositions[i, 1];
+	// Health bar border
+	draw_rectangle(unitX,unitY+selectUnitBoxHeight-3,unitX+selectUnitBoxWidth,unitY+selectUnitBoxHeight,true);
+	// Health bar fill
+	draw_set_alpha(1);
+	var unit = global.partyPositions[i];
+	var unitHealth = unit.hitpoints / unit.maxHitpoints;
+	draw_rectangle(unitX,unitY+selectUnitBoxHeight-3,unitX+selectUnitBoxWidth*unitHealth,unitY+selectUnitBoxHeight,false);	
 }
 
 // Display the log
