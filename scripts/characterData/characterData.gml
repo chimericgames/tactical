@@ -1148,7 +1148,7 @@ global.characters =
 	
 	braith :
 	{
-		name : "Braith", // Considered: Acacia, Maia, Willow, Chloe. Maybe this should be more threatening
+		name : "Braith", // Considered: Acacia, Maia
 		race : "Cervitaur",
 		alignment : Alignment.Friend,
 		size : Size.Large,
@@ -1158,8 +1158,8 @@ global.characters =
 		weapon2Name : "Barbed Javelin",
 		armor : global.armors.light,
 		armorName : "Mist-Stalker's Barding",
-		strength : 5,
-		spirit : 5,
+		strength : 4,
+		spirit : 6,
 		endurance : 3,
 		technique : 7,
 		swiftness : 7,
@@ -1180,7 +1180,7 @@ global.characters =
 	thistle :
 	{
 		name : "Thistle",
-		race : "Nymph",
+		race : "Nymph", // Or: Naiad, Dryad
 		alignment : Alignment.Friend,
 		size : Size.Normal,
 		weapon1 : global.weapons.thrownBlade,
@@ -1302,9 +1302,9 @@ global.characters =
 	},
 	
 	/* I need a monster for Acatl
-	? :
+	Xoco :
 	{
-		name : "?",
+		name : "Xoco",
 		race : "Dinosaur",
 		alignment : Alignment.Foe,
 		size : Size.Normal,

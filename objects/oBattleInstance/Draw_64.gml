@@ -25,17 +25,39 @@ if playerTurn && !battleStart
 		{
 			if mousePos != -1
 				draw_rectangle(menuX-5,menuChoiceY+mousePos*leading,menuX+selectBoxWidth,menuChoiceY+selectBoxHeight+mousePos*selectBoxHeight,true);
+		}
+			
+		// Highlight the active unit
+		if playerTurn
+		{
+			var activePlayerX = global.partyXYPositions[activeCharacter.position, 0]-selectUnitBoxWidth/2;
+			var activePlayerY = global.partyXYPositions[activeCharacter.position, 1];
+			draw_rectangle(activePlayerX,activePlayerY-selectUnitBoxHeight/2,activePlayerX+selectUnitBoxWidth,activePlayerY+selectUnitBoxHeight,true);
 		}	
 			
-		// Draw the enemy targeting box
-		if targetingEnemy && targetPositionEnemy > 0
+		// While targeting, show all possible targets and active target
+		if targetingEnemy
 		{
-			var selectionX = global.enemyXYPositions[targetPositionEnemy, 0]-selectUnitBoxWidth/2;
-			var selectionY = global.enemyXYPositions[targetPositionEnemy, 1];
-			draw_rectangle(selectionX,selectionY-selectUnitBoxHeight/2,selectionX+selectUnitBoxWidth,selectionY+selectUnitBoxHeight,true);
+			// Draw all possible targets
+			draw_set_alpha(.375);
+			for (var i = 1; i <= 6; ++i) 
+			{
+				var unitX = global.enemyXYPositions[i, 0]-selectUnitBoxWidth/2;
+				var unitY = global.enemyXYPositions[i, 1];
+				draw_rectangle(unitX,unitY-selectUnitBoxHeight/2,unitX+selectUnitBoxWidth,unitY+selectUnitBoxHeight,true);
+			}
+			
+			// Draw the active enemy targeting box	
+			if targetPositionEnemy > 0
+			{
+				draw_set_alpha(1);
+				var selectionX = global.enemyXYPositions[targetPositionEnemy, 0]-selectUnitBoxWidth/2;
+				var selectionY = global.enemyXYPositions[targetPositionEnemy, 1];
+				draw_rectangle(selectionX,selectionY-selectUnitBoxHeight/2,selectionX+selectUnitBoxWidth,selectionY+selectUnitBoxHeight,true);
+			}
 		}				
 			
-		// Draw the player targeting box
+		// Draw the active player targeting box
 		if targetingPlayer && targetPositionPlayer > 0
 		{
 			var selectionX = global.partyXYPositions[targetPositionPlayer, 0]-selectUnitBoxWidth/2;

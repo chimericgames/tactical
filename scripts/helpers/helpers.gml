@@ -260,20 +260,20 @@ function actionAttack(unit, applyStatus = noone)
 // Deal any sort of damage (after reductions)
 function dealDamage(unit, damageDealt)
 {
-		// Apply the damage
-		var previousHitpoints = unit.hitpoints;
-		unit.hitpoints = max(unit.hitpoints - damageDealt, 0);
+	// Apply the damage
+	var previousHitpoints = unit.hitpoints;
+	unit.hitpoints = max(unit.hitpoints - damageDealt, 0);
 			
-		// Proc on-damage passives
-		if checkUnitPassive(unit, "Berserker") && unit.endurance >= 1
-		{
-			unit.endurance -= 1;
-			unit.strength += 1;
-			calculateSubstats(noone, 1, unit);
-			log((unit.name) + "'s rage grows! Their endurance falls to " + string(unit.endurance) + " and their strength grows to " + string(unit.strength) + ".");
-		}
+	// Proc on-damage passives
+	if checkUnitPassive(unit, "Berserker") && unit.endurance >= 1
+	{
+		unit.endurance -= 1;
+		unit.strength += 1;
+		calculateSubstats(noone, 1, unit);
+		log((unit.name) + "'s rage grows! Their endurance falls to " + string(unit.endurance) + " and their strength grows to " + string(unit.strength) + ".");
+	}
 
-		checkUnitKO(unit, previousHitpoints);		
+	checkUnitKO(unit, previousHitpoints);		
 }
 
 // Attack target
@@ -291,6 +291,7 @@ function attackTarget(offense, defense, canBeCountered = true, isACounter = fals
 		
 		// While defending, increase defense by 4 and then add defense from any shields, etc
 		defenseDefense += (2 + max(defense.weapon1.armorProtection, defense.weapon2.armorProtection)) * global.derivedStatMultiplier;
+		// TODO: This isn't using shields yet!
 		
 		defenseTech += 2;
 		//log(string(defense.name) + " is defending, raising their defense from " + string(defenseOriginal) + " to " + string(defenseDefense) + " and their technique from " + string(techOriginal) + " to " + string(defenseTech) + ".");
