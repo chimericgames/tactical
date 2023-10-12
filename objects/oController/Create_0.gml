@@ -11,7 +11,7 @@ array_push(global.partyList, instantiateUnit("citalli", global.characters));
 */
 
 array_push(global.partyList, instantiateUnit("sigrid", global.characters));
-array_push(global.partyList, instantiateUnit("willow", global.characters));
+array_push(global.partyList, instantiateUnit("braith", global.characters));
 array_push(global.partyList, instantiateUnit("alkimos", global.characters));
 array_push(global.partyList, instantiateUnit("ilse", global.characters));
 array_push(global.partyList, instantiateUnit("thistle", global.characters));
@@ -20,7 +20,7 @@ array_push(global.partyList, instantiateUnit("citalli", global.characters));
 /*
 array_push(global.partyList, instantiateUnit("helle", global.characters));
 array_push(global.partyList, instantiateUnit("sigrid", global.characters));
-array_push(global.partyList, instantiateUnit("willow", global.characters));
+array_push(global.partyList, instantiateUnit("braith", global.characters));
 array_push(global.partyList, instantiateUnit("thistle", global.characters));
 
 array_push(global.partyList, instantiateUnit("acatl", global.characters));

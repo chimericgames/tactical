@@ -102,12 +102,12 @@ function calculateWeaponStun(character = noone)
 // Weapon defense (shields, etc) used to factor directly into defense, but I want it to only do so while blocking
 function calculateDefense(character = noone)
 {
-	return (character.endurance + character.armor.armorProtection) * global.derivedStatMultiplier;
+	return (character.endurance + character.armor.armorProtection + character.weapon2.armorProtection) * global.derivedStatMultiplier;
 }
 
 function calculateResistance(character = noone)
 {
-	return (character.spirit + character.armor.elementalProtection);
+	return (character.spirit + character.armor.elementalProtection + character.weapon2.elementalProtection) * global.derivedStatMultiplier;
 }
 
 function calculateLastStandChance(character = noone)

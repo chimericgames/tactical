@@ -140,6 +140,18 @@ global.passives =
 		name : "Survivor",
 		description : "Attack and defense is increased for each downed ally.",
 	},		
+	
+	reckoner :
+	{
+		name : "Reckoner",
+		description : "Virgil keeps track of his kills. For every kill, his critical multiplier increases by 1%.",		
+	},
+	
+	toxophilite :
+	{
+		name : "Toxophilite",
+		description : "Quiver items have a 50% chance to not consume a charge when used. Quiver items are never consumed if used while concealed.",
+	},
 }
 
 global.adventurePassives =
@@ -154,7 +166,7 @@ global.adventurePassives =
 	overwatch :
 	{
 		name : "Overwatch", 
-		description : "Reduces the chances of being ambushed while increasing the chances of ambushing enemies while scouting.",
+		description : "Reduces the chances of being ambushed while increasing the chances of surprising enemies while scouting.",
 	},
 	
 	rousingVerse :
@@ -172,9 +184,14 @@ global.adventurePassives =
 	inspirational :
 	{
 		name : "Inspirational", 
-		description : "Increases party morale and chance to resist being downed while leading",
+		description : "Increases party morale and chance to resist being downed while leading.",
 	},	
-
+	
+	ambush : 
+	{
+		name : "Ambush", 
+		description : "Before combat begins, attack an enemy with the lowest hit points. This attack ignores all defenses.",
+	},	
 }
 
 // Items
@@ -386,7 +403,7 @@ global.battleChoices =
 	{
 		name: "Rally",
 		manaCost : 1,
-		description : "The active character and a target ally attack a target simultaneously, combining their attack power.",
+		description : "The active character and an ally target attack an enemy target simultaneously, combining their attack power.",
 	},	
 	deadeye :
 	{
@@ -394,6 +411,12 @@ global.battleChoices =
 		manaCost : 1,
 		description : "",		
 	},	
+	conceal :
+	{
+		name: "Conceal",
+		manaCost : 1,
+		description : "",		
+	},		
 	thorns :
 	{
 		name: "Thorns",
@@ -441,7 +464,13 @@ global.battleChoices =
 		name : "Lash Out",	
 		manaCost : 1,
 		description : "A desperate attack that adds random damage up to the attacker's missing hitpoints.",
-	}
+	},
+	takeDown :
+	{
+		name : "Take down",	
+		manaCost : 1,
+		description : "Attacks, dealing additional damage for each negative token on the target.",
+	},
 }
 
 // Weapon properties to derive stats from
@@ -701,10 +730,23 @@ global.weaponProperties =
 		encumbrance : 0,
 		armorProtection : 0,
 		elementalProtection : 0,			
+	},
+	
+	defensive:
+	{
+		damage : -2,
+		crit : -3,
+		wieldiness : -2,
+		penetration : 0,
+		bleed : 0,
+		stun : 0,
+		range : 0,
+		hits : 0,
+		encumbrance : 0,
+		armorProtection : 1, // Multiplied by its calculated damage
+		elementalProtection : 1, // Multiplied by its calculated damage
 	},	
 	
-// Shield -3 damage, -2 crit, +2 armor, +2 elemental protection
-// Great shield: +1 damage, +1 armor, +1 elemental protection (compared to shield)	
 
 }
 
@@ -736,6 +778,16 @@ global.weapons =
 	{
 		tags : [ global.weaponProperties.crushing ],
 	},
+	
+	clovenHooves :
+	{
+		tags : [ global.weaponProperties.crushing, global.weaponProperties.dual, global.weaponProperties.verySmall ],
+	},
+	
+	bladedHooves :
+	{
+		tags : [ global.weaponProperties.slashing, global.weaponProperties.dual, global.weaponProperties.small ],
+	},	
 
 	sword :
 	{
@@ -857,42 +909,25 @@ global.weapons =
 		tags : [ global.weaponProperties.piercing, global.weaponProperties.pole, global.weaponProperties.thrownHeavy ],
 	},
 
-	mediumShield : 
+	buckler :
 	{
-		damage : 1,
-		range : Range.Short,
-		hits : 1,
-		damageType : DamageTypes.Crushing,
-		wieldiness : 0,
-		crit : -2,
-		armorProtection : 2,
-		elementalProtection : 2
-	},		
+		tags : [ global.weaponProperties.crushing, global.weaponProperties.small, global.weaponProperties.defensive ],
+	},
+
+	mediumShield :
+	{
+		tags : [ global.weaponProperties.crushing, global.weaponProperties.defensive ],
+	},
 	
-	largeShield : 
+	largeShield :
 	{
-		damage : 2,
-		range : Range.Short,
-		hits : 1,
-		damageType : DamageTypes.Crushing,
-		wieldiness : 0,
-		crit : -2,
-		armorProtection : 3,
-		elementalProtection : 3,
-	},	
-
-	greatShield : 
+		tags : [ global.weaponProperties.crushing, global.weaponProperties.large, global.weaponProperties.defensive ],
+	},
+	
+	greatShield :
 	{
-		damage : 4,
-		range : Range.Short,
-		hits : 1,
-		damageType : DamageTypes.Crushing,
-		wieldiness : 0,
-		crit : -3,
-		armorProtection : 4,
-		elementalProtection : 4,
-	},	
-
+		tags : [ global.weaponProperties.crushing, global.weaponProperties.great, global.weaponProperties.defensive ],
+	},
 
 }
 
@@ -901,6 +936,8 @@ calculateWeaponStats(global.weapons.piercingTeeth);
 calculateWeaponStats(global.weapons.terribleClaws);
 calculateWeaponStats(global.weapons.monsterWings);
 calculateWeaponStats(global.weapons.monsterHorns);
+calculateWeaponStats(global.weapons.clovenHooves);
+calculateWeaponStats(global.weapons.bladedHooves);
 calculateWeaponStats(global.weapons.sword);
 calculateWeaponStats(global.weapons.heavySword);
 calculateWeaponStats(global.weapons.spear);
@@ -924,6 +961,10 @@ calculateWeaponStats(global.weapons.thrownBlade);
 calculateWeaponStats(global.weapons.thrownAxe);
 calculateWeaponStats(global.weapons.javelin);
 calculateWeaponStats(global.weapons.bolas);
+calculateWeaponStats(global.weapons.buckler);
+calculateWeaponStats(global.weapons.mediumShield);
+calculateWeaponStats(global.weapons.largeShield);
+calculateWeaponStats(global.weapons.greatShield);
 
 // Armors
 global.armors =
@@ -1054,7 +1095,7 @@ function calculateWeaponStats(weaponName)
 	for (var i = 0; i < weaponTags; ++i) 
 	{
 		var weaponProperty = weapon.tags[i];
-		weapon.armorProtection += weaponProperty.armorProtection;
+		weapon.armorProtection += weaponProperty.armorProtection * weapon.damage;
 	}
 	
 	// Elemental Protection
@@ -1062,7 +1103,7 @@ function calculateWeaponStats(weaponName)
 	for (var i = 0; i < weaponTags; ++i) 
 	{
 		var weaponProperty = weapon.tags[i];
-		weapon.elementalProtection += weaponProperty.elementalProtection;
+		weapon.elementalProtection += weaponProperty.elementalProtection * weapon.damage;
 	}	
 	
 }
@@ -1105,26 +1146,26 @@ global.characters =
 		protects : [],
 	},
 	
-	willow :
+	braith :
 	{
-		name : "Willow", // Considered: Acacia, Maia, Chloe. Maybe this should be more threatening
+		name : "Braith", // Considered: Acacia, Maia, Willow, Chloe. Maybe this should be more threatening
 		race : "Cervitaur",
 		alignment : Alignment.Friend,
 		size : Size.Large,
-		weapon1 : global.weapons.ridingFlail,
-		weapon1Name : "Ironwood Thorned Flail",
+		weapon1 : global.weapons.clovenHooves,
+		weapon1Name : "Cloven Hooves",
 		weapon2 : global.weapons.javelin,
 		weapon2Name : "Barbed Javelin",
 		armor : global.armors.light,
 		armorName : "Mist-Stalker's Barding",
 		strength : 5,
-		spirit : 3, 
-		endurance : 2,
+		spirit : 5,
+		endurance : 3,
 		technique : 7,
-		swiftness : 6,
-		vitality : 5,
+		swiftness : 7,
+		vitality : 4,
 		willpower : 3,
-		active : global.battleChoices.harry,
+		active : global.battleChoices.takeDown,
 		passive : [ global.passives.noxiousBloom, global.passives.perniciousHorticulturist ],
 		items : [ global.items.vipersVenom, global.items.nectarUnguent ],
 		// Adventure skills
@@ -1156,15 +1197,15 @@ global.characters =
 		vitality : 4,
 		willpower : 2,
 		active : global.battleChoices.thorns,
-		passive : [ global.passives.sharpReflexes, global.passives.winnower ],
-		items : [ global.items.witbaneToxin, global.items.nectarUnguent ],
+		passive : [ global.passives.sharpReflexes, global.passives.winnower ], // Change to "knvies out"
+		items : [ global.items.witbaneToxin, ],
 		// Adventure skills
 		leadership : Skill.Dismal,
 		scouting : Skill.Masterful,
 		huntingGathering : Skill.Skilled,
 		cooking : Skill.Poor,
 		adventurePassive : [],		
-		protects : [ "Willow" ],
+		protects : [ "" ],
 	},
 	
 	cassiel :
@@ -1178,7 +1219,7 @@ global.characters =
 		weapon2 : global.weapons.fists,		
 		weapon2Name : "Nothing",
 		armor : global.armors.heavy,
-		armorName : "Engraved Full Plate and Wrap Cloak",
+		armorName : "Engraved Full Plate",
 		strength : 7,
 		spirit : 4, 
 		endurance : 6,
@@ -1213,10 +1254,10 @@ global.characters =
 		strength : 4,
 		spirit : 5, 
 		endurance : 3,
-		technique : 8,
+		technique : 7,
 		swiftness : 5,
 		vitality : 3,
-		willpower : 1,
+		willpower : 5,
 		active : global.battleChoices.ignite,
 		passive : [ global.passives.firebug, global.passives.irrepressible ],
 		items : [ global.items.pitchFlask, global.items.incendiaryQuiver ],
@@ -1247,9 +1288,9 @@ global.characters =
 		technique : 5,
 		swiftness : 4,
 		vitality : 4,
-		willpower : 3,
+		willpower : 6,
 		active : global.battleChoices.harry, // This is placeholder
-		passive : [ global.passives.falconer, global.passives.herbalist ],
+		passive : [ global.passives.falconer, global.passives.herbalist ],		// Acatl needs more defensive utility
 		items : [ global.items.falconryGauntlet , global.items.herbalBalm ],
 		// Adventure skills
 		leadership : Skill.Poor,
@@ -1287,7 +1328,7 @@ global.characters =
 	
 	demi :
 	{
-		name : "Demi",
+		name : "Demi", // Not final name
 		race : "Harpy",
 		alignment : Alignment.Friend,
 		size : Size.Normal,
@@ -1298,14 +1339,14 @@ global.characters =
 		armor : global.armors.monsterArmorEvasion,
 		armorName : "Dazzling Plumage",
 		strength : 4,
-		spirit : 7,
+		spirit : 8,
 		endurance : 2,
-		technique : 5,
-		swiftness : 4,
+		technique : 6,
+		swiftness : 5,
 		vitality : 4,
 		willpower : 4,
 		active : global.battleChoices.tailWind,
-		passive : [ global.passives.aerialist, global.passives.spiritWard ],
+		passive : [ global.passives.aerialist, global.passives.spiritWard ], // Add a passive that defending boosts resistance for her row
 		items : [ global.items.galeCharm ],
 		// Adventure skills
 		leadership : Skill.Poor,
@@ -1392,7 +1433,7 @@ global.characters =
 		weapon2 : global.weapons.bolas,
 		weapon2Name : "Braided Bolas",
 		armor : global.armors.light,
-		armorName : "Reinforced Fur-Lined Coat",
+		armorName : "Brigadine Fur-Lined Coat",
 		strength : 2 + 2,	// Temp boosted stats to help with testing
 		spirit : 3 + 2,
 		endurance : 3 + 2,
@@ -1401,7 +1442,7 @@ global.characters =
 		vitality : 3 + 2,
 		willpower : 8,
 		active : global.battleChoices.lashOut,
-		passive : [ global.passives.herosJourney, global.passives.survivor ],
+		passive : [ global.passives.herosJourney, global.passives.survivor ], // Add a passive for granting the party conditional stat boosts
 		items : [  ],
 		// Adventure skills
 		leadership : Skill.Skilled,
@@ -1411,11 +1452,44 @@ global.characters =
 		adventurePassive : [ global.adventurePassives.inspirational ],		
 		protects : [  ],
 	},
+	
+	
+	virgil :
+	{
+		name : "Virgil",
+		race : "Human",
+		alignment : Alignment.Friend,
+		size : Size.Normal,
+		weapon1 : global.weapons.longbow,
+		weapon1Name : "'Hush', Masterwork Selfbow",
+		weapon2 : global.weapons.combatKnives,
+		weapon2Name : "Bone-Carved Talon Knife",
+		armor : global.armors.light,
+		armorName : "Heavy Worn Cloak",
+		strength : 6,
+		spirit : 2, 
+		endurance : 4,
+		technique : 8,
+		swiftness : 2,
+		vitality : 5,
+		willpower : 4,
+		active : global.battleChoices.conceal, //global.battleChoices.deadeye, // Skip a turn to boost damage and accuracy of next hit. Damage resets it
+		passive : [ global.passives.reckoner, global.passives.toxophilite ], // Improved bleed with archery. Bow attack matches his STR. Defending or switching positions activates stealth.
+		items : [ global.items.broadheadQuiver ],
+		// Adventure skills
+		leadership : Skill.Poor,
+		scouting : Skill.Masterful,
+		huntingGathering : Skill.Skilled,
+		cooking : Skill.Poor,
+		adventurePassive : [ global.adventurePassives.ambush ],	// Free attack against lowest HP target at the start of combat
+		protects : [ ],
+	},		
+	
 
 };
 
 // Create a list of characters
-global.characterList = [ global.characters.sigrid, global.characters.willow, global.characters.thistle, global.characters.cassiel, global.characters.citalli, global.characters.acatl, global.characters.demi, global.characters.alkimos, global.characters.helle, global.characters.ilse ];
+global.characterList = [ global.characters.sigrid, global.characters.braith, global.characters.thistle, global.characters.cassiel, global.characters.citalli, global.characters.acatl, global.characters.demi, global.characters.alkimos, global.characters.helle, global.characters.ilse ];
 global.characterCount = array_length(global.characterList);
 
 // Enemies

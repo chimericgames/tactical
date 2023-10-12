@@ -99,11 +99,14 @@ function inputControl()
 						activeEnemy = targetEnemy;
 						if targetEnemy != noone
 						{
+							log(string(activeCharacter.name) + " prepares to attack the " + string(targetEnemy.name) + ".");
 							queueAction("Attack", targetEnemy);
 						}
-						else		
+						else
+						{
+							log(string(activeCharacter.name) + " has no target to attack (Debug: target is 'noone').");
 							exit;
-						log(string(activeCharacter.name) + " prepares to attack the " + string(targetEnemy.name) + ".");
+						}	
 						actionCountdown = global.menuDelay;
 						advanceTurn();
 					}	

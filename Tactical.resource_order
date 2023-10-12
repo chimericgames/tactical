@@ -1,0 +1,11 @@
+{
+  "FolderOrderSettings": [],
+  "ResourceOrderSettings": [
+    {"name":"oController","order":1,"path":"objects/oController/oController.yy",},
+    {"name":"helpers","order":2,"path":"scripts/helpers/helpers.yy",},
+    {"name":"enums","order":3,"path":"scripts/enums/enums.yy",},
+    {"name":"battleActions","order":5,"path":"scripts/battleActions/battleActions.yy",},
+    {"name":"inputControl","order":4,"path":"scripts/inputControl/inputControl.yy",},
+    {"name":"drawCharacterStats","order":1,"path":"scripts/drawCharacterStats/drawCharacterStats.yy",},
+  ],
+}
