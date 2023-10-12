@@ -34,7 +34,18 @@ if playerTurn && !battleStart
 			var activePlayerY = global.partyXYPositions[activeCharacter.position, 1];
 			draw_rectangle(activePlayerX,activePlayerY-selectUnitBoxHeight/2,activePlayerX+selectUnitBoxWidth,activePlayerY+selectUnitBoxHeight,true);
 		}	
-			
+		
+		// If the active unit has a melee weapon, show their attack target //TODO: For now, this only shows the unit across, even if its invalid
+		if activeCharacter.range == Range.Short
+		{
+			draw_set_alpha(.375);
+			var position = activeCharacter.position;
+			var unitX = global.enemyXYPositions[position, 0]-selectUnitBoxWidth/2;
+			var unitY = global.enemyXYPositions[position, 1];
+			draw_rectangle(unitX,unitY-selectUnitBoxHeight/2,unitX+selectUnitBoxWidth,unitY+selectUnitBoxHeight,true);
+			draw_set_alpha(1);
+		}
+		
 		// While targeting, show all possible targets and active target
 		if targetingEnemy
 		{

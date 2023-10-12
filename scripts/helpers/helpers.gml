@@ -620,7 +620,7 @@ function getTarget(unit)
 		var position = unit.position;
 		var positionToCheck = unit.position;
 			
-		// Check across	first
+		// Check across	first // TODO: Can we make this more elegant?
 		var target = enemyList[@ positionToCheck];
 		if target != noone && target.concious
 		{
@@ -636,7 +636,7 @@ function getTarget(unit)
 			else
 				positionToCheck = [3,1];
 				
-			for(var i=0; i<2; i++)
+			for(var i=0;i<2;i++)
 			{
 				var target = enemyList[@ positionToCheck[i]];
 				if target != noone && target.concious
