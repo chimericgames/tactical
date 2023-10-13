@@ -614,7 +614,7 @@ function getTarget(unit)
 	
 	// Short range units auto attack whoever is engaged with them, or the nearest front row unit
 	// TODO: Medium units work this way too, but need code changes
-	if range <= Range.Short
+	if range <= Range.Medium
 	{
 		// For short range units, check for a foe in the same position and then next to it
 		var position = unit.position;
