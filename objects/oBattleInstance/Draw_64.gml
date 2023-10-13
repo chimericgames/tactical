@@ -13,8 +13,12 @@ if playerTurn && !battleStart
 		battleChoiceCount = array_length(battleChoices);
 		for (var i=0; i<battleChoiceCount; i++)
 		{
+			// Draw the battle choice box
+			draw_set_alpha(.375);
+			draw_rectangle(menuX-5,menuChoiceY+i*leading,menuX+selectBoxWidth,menuChoiceY+selectBoxHeight+i*leading,true);
+			// Draw the battle choice string
+			draw_set_alpha(1);
 			var battleChoiceString = battleChoices[i];
-			
 			draw_text(menuX + 10,menuY+ii*leading,battleChoiceString.name); ii++;
 		}
 		draw_set_color(c_white);
@@ -24,7 +28,7 @@ if playerTurn && !battleStart
 		if battleChoicesAvailable
 		{
 			if mousePos != -1
-				draw_rectangle(menuX-5,menuChoiceY+mousePos*leading,menuX+selectBoxWidth,menuChoiceY+selectBoxHeight+mousePos*selectBoxHeight,true);
+				draw_rectangle(menuX-5,menuChoiceY+mousePos*leading,menuX+selectBoxWidth,menuChoiceY+selectBoxHeight+mousePos*leading,true);
 		}
 			
 		// Highlight the active unit
@@ -88,31 +92,31 @@ for (var i = 1; i <= 6; ++i)
 	var unitX = global.enemyXYPositions[i, 0]-selectUnitBoxWidth/2;
 	var unitY = global.enemyXYPositions[i, 1];
 	// Health bar border
-	draw_rectangle(unitX,unitY+selectUnitBoxHeight-3,unitX+selectUnitBoxWidth,unitY+selectUnitBoxHeight,true);
+	draw_rectangle(unitX,unitY+selectUnitBoxHeight-2,unitX+selectUnitBoxWidth,unitY+selectUnitBoxHeight,true);
 	// Health bar fill
 	draw_set_alpha(1);
 	var unit = enemyPositions[i];
 	var unitHealth = unit.hitpoints / unit.maxHitpoints;
-	draw_rectangle(unitX,unitY+selectUnitBoxHeight-3,unitX+selectUnitBoxWidth*unitHealth,unitY+selectUnitBoxHeight,false);
+	draw_rectangle(unitX,unitY+selectUnitBoxHeight-2,unitX+selectUnitBoxWidth*unitHealth,unitY+selectUnitBoxHeight,false);
 	
 	// Player bars
 	draw_set_alpha(.375);
 	var unitX = global.partyXYPositions[i, 0]-selectUnitBoxWidth/2;
 	var unitY = global.partyXYPositions[i, 1];
 	// Health bar border
-	draw_rectangle(unitX,unitY+selectUnitBoxHeight-3,unitX+selectUnitBoxWidth,unitY+selectUnitBoxHeight,true);
+	draw_rectangle(unitX,unitY+selectUnitBoxHeight-2,unitX+selectUnitBoxWidth,unitY+selectUnitBoxHeight,true);
 	// Health bar fill
 	draw_set_alpha(1);
 	var unit = global.partyPositions[i];
 	var unitHealth = unit.hitpoints / unit.maxHitpoints;
-	draw_rectangle(unitX,unitY+selectUnitBoxHeight-3,unitX+selectUnitBoxWidth*unitHealth,unitY+selectUnitBoxHeight,false);	
+	draw_rectangle(unitX,unitY+selectUnitBoxHeight-2,unitX+selectUnitBoxWidth*unitHealth,unitY+selectUnitBoxHeight,false);	
 }
 
 // Display the log
 var battleLogSize = array_length(global.battleLog);
 for (var i=0; i<battleLogSize; i++)
 {
-	draw_set_alpha(2.25 - .15 * i);
+	draw_set_alpha(2.1 - .15 * i);
 	draw_text(menuX,window_get_height()-leading*(i+2),string(global.battleLog[i])); ii++;
 	draw_set_alpha(1);
 }

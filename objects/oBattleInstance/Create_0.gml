@@ -5,13 +5,13 @@ displayUnitStats = true;
 
 menuX = 20;
 menuY = 20;
-leading = 20;
+leading = 22;
 mousePos = -1;
 menuChoiceY = menuY+leading*3;
 selectBoxWidth = 150;
-selectBoxHeight = leading;
+selectBoxHeight = leading - 2;
 selectUnitBoxWidth = 225;
-selectUnitBoxHeight = leading * 2;
+selectUnitBoxHeight = leading * 1.5;
 battleChoices = [];
 battleChoice = "";
 battleChoicesAvailable = true;
