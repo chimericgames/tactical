@@ -15,7 +15,7 @@ if playerTurn && !battleStart
 		{
 			// Draw the battle choice box
 			draw_set_alpha(.375);
-			draw_rectangle(menuX-5,menuChoiceY+i*leading,menuX+selectBoxWidth,menuChoiceY+selectBoxHeight+i*leading,true);
+			draw_rectangle(menuX-5,menuChoiceY+i*leading,menuX+battleChoiceBoxWidth,menuChoiceY+battleChoiceBoxHeight+i*leading,true);
 			// Draw the battle choice string
 			draw_set_alpha(1);
 			var battleChoiceString = battleChoices[i];
@@ -28,7 +28,7 @@ if playerTurn && !battleStart
 		if battleChoicesAvailable
 		{
 			if mousePos != -1
-				draw_rectangle(menuX-5,menuChoiceY+mousePos*leading,menuX+selectBoxWidth,menuChoiceY+selectBoxHeight+mousePos*leading,true);
+				draw_rectangle(menuX-5,menuChoiceY+mousePos*leading,menuX+battleChoiceBoxWidth,menuChoiceY+battleChoiceBoxHeight+mousePos*leading,true);
 		}
 			
 		// Highlight the active unit
@@ -86,30 +86,37 @@ if playerTurn && !battleStart
 // Draw player and enemy health bars
 for (var i = 1; i <= 6; ++i) 
 {
-	
-	// Enemy bars
-	draw_set_alpha(.375);
-	var unitX = global.enemyXYPositions[i, 0]-selectUnitBoxWidth/2;
-	var unitY = global.enemyXYPositions[i, 1];
-	// Health bar border
-	draw_rectangle(unitX,unitY+selectUnitBoxHeight-2,unitX+selectUnitBoxWidth,unitY+selectUnitBoxHeight,true);
-	// Health bar fill
-	draw_set_alpha(1);
 	var unit = enemyPositions[i];
-	var unitHealth = unit.hitpoints / unit.maxHitpoints;
-	draw_rectangle(unitX,unitY+selectUnitBoxHeight-2,unitX+selectUnitBoxWidth*unitHealth,unitY+selectUnitBoxHeight,false);
+	if unit != -1
+	{
+		// Enemy bars
+		draw_set_alpha(.375);
+		var unitX = global.enemyXYPositions[i, 0]-selectUnitBoxWidth/2;
+		var unitY = global.enemyXYPositions[i, 1];
+		// Health bar border
+		draw_rectangle(unitX,unitY+selectUnitBoxHeight-2,unitX+selectUnitBoxWidth,unitY+selectUnitBoxHeight,true);
+		// Health bar fill
+		draw_set_alpha(1);
+		var unit = enemyPositions[i];
+		var unitHealth = unit.hitpoints / unit.maxHitpoints;
+		draw_rectangle(unitX,unitY+selectUnitBoxHeight-2,unitX+selectUnitBoxWidth*unitHealth,unitY+selectUnitBoxHeight,false);
+	}
 	
-	// Player bars
-	draw_set_alpha(.375);
-	var unitX = global.partyXYPositions[i, 0]-selectUnitBoxWidth/2;
-	var unitY = global.partyXYPositions[i, 1];
-	// Health bar border
-	draw_rectangle(unitX,unitY+selectUnitBoxHeight-2,unitX+selectUnitBoxWidth,unitY+selectUnitBoxHeight,true);
-	// Health bar fill
-	draw_set_alpha(1);
 	var unit = global.partyPositions[i];
-	var unitHealth = unit.hitpoints / unit.maxHitpoints;
-	draw_rectangle(unitX,unitY+selectUnitBoxHeight-2,unitX+selectUnitBoxWidth*unitHealth,unitY+selectUnitBoxHeight,false);	
+	if unit != -1
+	{
+		// Player bars
+		draw_set_alpha(.375);
+		var unitX = global.partyXYPositions[i, 0]-selectUnitBoxWidth/2;
+		var unitY = global.partyXYPositions[i, 1];
+		// Health bar border
+		draw_rectangle(unitX,unitY+selectUnitBoxHeight-2,unitX+selectUnitBoxWidth,unitY+selectUnitBoxHeight,true);
+		// Health bar fill
+		draw_set_alpha(1);
+		var unit = global.partyPositions[i];
+		var unitHealth = unit.hitpoints / unit.maxHitpoints;
+		draw_rectangle(unitX,unitY+selectUnitBoxHeight-2,unitX+selectUnitBoxWidth*unitHealth,unitY+selectUnitBoxHeight,false);	
+	}
 }
 
 // Display the log
@@ -131,7 +138,7 @@ if displayUnits
 	for (var i = 1; i <= 6; ++i) 
 	{
 		var unit = global.partyPositions[i];
-		if unit != noone
+		if unit != -1
 		{
 			if !unit.concious
 				draw_set_color(c_dkgray);
@@ -150,7 +157,7 @@ if displayUnits
 		var unitX = global.enemyXYPositions[i, 0];	
 		var unitY = global.enemyXYPositions[i, 1];
 		var unit = enemyPositions[i];
-		if unit != noone
+		if unit != -1
 		{
 			if !unit.concious
 				draw_set_color(c_dkgray);
@@ -181,7 +188,8 @@ draw_text(turnOrderX,turnOrderY+ii*leading,"Turn Order:"); ii++;
 for (var i=0; i<turnOrderCount; i++)
 {
 	var unit = turnOrder[i];
-	draw_text(turnOrderX,turnOrderY+ii*leading,"[" + string(unit.position) + "]" + string(unit.name) + ": " + string(unit.hitpoints) + "/" + string(unit.maxHitpoints)); ii++;
+	if unit != -1
+		draw_text(turnOrderX,turnOrderY+ii*leading,"[" + string(unit.position) + "]" + string(unit.name) + ": " + string(unit.hitpoints) + "/" + string(unit.maxHitpoints)); ii++;
 }
 
 // Draw queued actions

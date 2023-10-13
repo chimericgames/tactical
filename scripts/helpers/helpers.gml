@@ -203,9 +203,15 @@ function getRandomTarget(targetList)
 	var validTargets = [];
 	for (var i=0; i<=targetListCount; i++) 
 	{		
-		var unit = targetList[i];
-		if unit != noone && unit.concious == true
-			array_push(validTargets, unit);
+		// Make sure the unit is a unit, and not an empty slot (or part of a big monster)
+		if is_struct(targetList[i])
+		{
+			var unit = targetList[i];
+			if unit.concious == true
+			{
+				array_push(validTargets, unit);
+			}
+		}		
 	}
 	var validTargetCount = array_length(validTargets)-1;
 	if validTargetCount >= 0
@@ -821,6 +827,10 @@ function instantiateUnit(unitName, list = global.enemies) {
 function addUnitToPosition(unit, position, party)
 {	
 	if unit != noone
+	{
 		unit.position = position;
-	party[@ position] = unit;
+		party[@ position] = unit;
+	}
+	else
+		party[@ position] = -1;
 }

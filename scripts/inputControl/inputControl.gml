@@ -26,19 +26,19 @@ function inputControl()
 
 	// Mouseover menu
 	// TODO: Refactor this with a helper function
-	if point_in_rectangle(mouse_x,mouse_y,menuX,menuChoiceY,menuX+selectBoxWidth,menuChoiceY+selectBoxHeight)
+	if point_in_rectangle(mouse_x,mouse_y,menuX,menuChoiceY,menuX+battleChoiceBoxWidth,menuChoiceY+battleChoiceBoxHeight)
 		mousePos = 0;
-	else if point_in_rectangle(mouse_x,mouse_y,menuX,menuChoiceY+leading,menuX+selectBoxWidth,menuChoiceY+selectBoxHeight*2)
+	else if point_in_rectangle(mouse_x,mouse_y,menuX,menuChoiceY+leading,menuX+battleChoiceBoxWidth,menuChoiceY+battleChoiceBoxHeight*2)
 		mousePos = 1;
-	else if point_in_rectangle(mouse_x,mouse_y,menuX,menuChoiceY+leading*2,menuX+selectBoxWidth,menuChoiceY+selectBoxHeight*3)
+	else if point_in_rectangle(mouse_x,mouse_y,menuX,menuChoiceY+leading*2,menuX+battleChoiceBoxWidth,menuChoiceY+battleChoiceBoxHeight*3)
 		mousePos = 2;	
-	else if point_in_rectangle(mouse_x,mouse_y,menuX,menuChoiceY+leading*3,menuX+selectBoxWidth,menuChoiceY+selectBoxHeight*4)
+	else if point_in_rectangle(mouse_x,mouse_y,menuX,menuChoiceY+leading*3,menuX+battleChoiceBoxWidth,menuChoiceY+battleChoiceBoxHeight*4)
 		mousePos = 3;
-	else if battleChoiceNumber>=5 && point_in_rectangle(mouse_x,mouse_y,menuX,menuChoiceY+leading*4,menuX+selectBoxWidth,menuChoiceY+selectBoxHeight*5)
+	else if battleChoiceNumber>=5 && point_in_rectangle(mouse_x,mouse_y,menuX,menuChoiceY+leading*4,menuX+battleChoiceBoxWidth,menuChoiceY+battleChoiceBoxHeight*5)
 		mousePos = 4;	
-	else if battleChoiceNumber>=6 && point_in_rectangle(mouse_x,mouse_y,menuX,menuChoiceY+leading*5,menuX+selectBoxWidth,menuChoiceY+selectBoxHeight*6)
+	else if battleChoiceNumber>=6 && point_in_rectangle(mouse_x,mouse_y,menuX,menuChoiceY+leading*5,menuX+battleChoiceBoxWidth,menuChoiceY+battleChoiceBoxHeight*6)
 		mousePos = 5;		
-	else if battleChoiceNumber>=7 && point_in_rectangle(mouse_x,mouse_y,menuX,menuChoiceY+leading*6,menuX+selectBoxWidth,menuChoiceY+selectBoxHeight*7)
+	else if battleChoiceNumber>=7 && point_in_rectangle(mouse_x,mouse_y,menuX,menuChoiceY+leading*6,menuX+battleChoiceBoxWidth,menuChoiceY+battleChoiceBoxHeight*7)
 		mousePos = 6;	
 	else
 		mousePos = -1;
