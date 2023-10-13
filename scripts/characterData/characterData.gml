@@ -465,11 +465,11 @@ global.battleChoices =
 		manaCost : 1,
 		description : "A desperate attack that adds random damage up to the attacker's missing hitpoints.",
 	},
-	shadestep :
+	shadestalk :
 	{
-		name : "Shadestep",	
+		name : "Shadestalk",	
 		manaCost : 1,
-		description : "Becomes concealed. While concealed, has +7% critical strike chance with their next attack.",
+		description : "Becomes concealed. While concealed, gain 2 Regen and 2 Ambush tokens at the end of each turn.", // Regen heals equal to their stacks, then decrements. Ambush tokens provide +7% critical strike chance and all are consumed on attack. 
 	},
 }
 
@@ -1163,7 +1163,7 @@ global.characters =
 		swiftness : 7,
 		vitality : 4,
 		willpower : 3,
-		active : global.battleChoices.shadestep,
+		active : global.battleChoices.shadestalk,
 		passive : [ global.passives.noxiousBloom, global.passives.perniciousHorticulturist ],
 		items : [ global.items.vipersVenom, global.items.nectarUnguent ],
 		// Adventure skills
