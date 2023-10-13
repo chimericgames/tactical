@@ -46,6 +46,7 @@ function drawCharacterStats(unit, foe, statsX, statsY)
 	draw_text(statsX,statsY+ii*leading,"Derived Stats: "); ii++;
 	draw_text(statsX+10,statsY+ii*leading,"Hitpoints: "+string(unit.hitpoints) + "/" + string(unit.maxHitpoints)); ii++;
 	draw_text(statsX+10,statsY+ii*leading,"Equipped Weapon: "+string(unit.activeWeaponName));ii++;
+	draw_text(statsX+10,statsY+ii*leading,"Weapon Range: "+string(unit.range));ii++;
 	var attackAVG = unit.attack + (unit.attack * unit.critChance/100 * global.critDamage);
 	var crit1 = string(unit.critChance);
 	if unit.weaponHits > 1

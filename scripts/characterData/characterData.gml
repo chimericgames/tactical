@@ -943,6 +943,7 @@ calculateWeaponStats(global.weapons.heavySword);
 calculateWeaponStats(global.weapons.spear);
 calculateWeaponStats(global.weapons.axe);
 calculateWeaponStats(global.weapons.poleAxe);
+calculateWeaponStats(global.weapons.greatAxe);
 calculateWeaponStats(global.weapons.mace);
 calculateWeaponStats(global.weapons.flail);
 calculateWeaponStats(global.weapons.eztli);
@@ -1107,9 +1108,6 @@ function calculateWeaponStats(weaponName)
 	}	
 	
 }
-
-calculateWeaponStats(global.weapons.greatAxe);
-
 
 // Characters
 global.characters =

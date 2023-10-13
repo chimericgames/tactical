@@ -400,7 +400,7 @@ function attackTarget(offense, defense, canBeCountered = true, isACounter = fals
 	else 
 	{	
 		// Only counter medium and short ranged attacks and only if it isn't already a counter
-		if canBeCountered && offense.range != Range.Long
+		if canBeCountered && offense.range < Range.Long
 		{			
 			// Check if the target counter attacks
 			var counteredRoll = dieRoll();
@@ -614,7 +614,7 @@ function getTarget(unit)
 	
 	// Short range units auto attack whoever is engaged with them, or the nearest front row unit
 	// TODO: Medium units work this way too, but need code changes
-	if range != Range.Long
+	if range <= Range.Short
 	{
 		// For short range units, check for a foe in the same position and then next to it
 		var position = unit.position;
@@ -688,12 +688,12 @@ function getTarget(unit)
 		}
 	}
 	// Long range enemies attack a random target
-	else if unit.alignment == Alignment.Foe && range == Range.Long
+	else if unit.alignment == Alignment.Foe && range >= Range.Long
 	{
 		return getRandomTarget(enemyList);
 	}
 	// Long range player characters attack a chosen target
-	else if unit.alignment == Alignment.Friend && range == Range.Long
+	else if unit.alignment == Alignment.Friend && range >= Range.Long
 	{
 		targetingEnemy = true;
 		battleChoicesAvailable = false;
