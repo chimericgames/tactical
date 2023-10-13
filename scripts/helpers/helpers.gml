@@ -256,9 +256,9 @@ function actionAttack(unit, applyStatus = noone)
 			log(string(unit.name) + " has no target. They choose a new target to attack...");
 		if !targetEnemy.concious
 			log(string(targetEnemy.name) + " is already down, so " + string(unit.name) + " chooses a new target to attack...");
-		var targetEnemy = getTarget(unit);
+		var targetEnemy = getTarget(unit, false);
+		log("Chose a new target: " + string(targetEnemy.name));
 		attackTarget(unit, targetEnemy,,,applyStatus);
-		log("");
 		actionCountdown = global.actionDelay;				
 	}
 }	
@@ -613,9 +613,9 @@ function queueAction(action = "Attack", target = noone)
 }
 
 // Targeting logic
-function getTarget(unit)
+function getTarget(unit, chooseTarget = true)
 {
-	var enemyList = unit.alignment == Alignment.Foe ? global.partyPositions : enemyPositions;
+	var opposingList = unit.alignment == Alignment.Foe ? global.partyPositions : enemyPositions;
 	var range = unit.range;
 	
 	// Short range units auto attack whoever is engaged with them, or the nearest front row unit
@@ -627,11 +627,11 @@ function getTarget(unit)
 		var positionToCheck = unit.position;
 			
 		// Check across	first // TODO: Can we make this more elegant?
-		var target = enemyList[@ positionToCheck];
+		var target = opposingList[@ positionToCheck];
 		if target != noone && target.concious
 		{
 			//log("Targeting: " + string(target.name));
-			return enemyList[@ positionToCheck];	
+			return opposingList[@ positionToCheck];	
 		}	
 			
 		// If center, check either side
@@ -644,11 +644,11 @@ function getTarget(unit)
 				
 			for(var i=0;i<2;i++)
 			{
-				var target = enemyList[@ positionToCheck[i]];
+				var target = opposingList[@ positionToCheck[i]];
 				if target != noone && target.concious
 				{
 					//log("Targeting: " + string(target.name));					
-					return enemyList[@ positionToCheck[i]];		
+					return opposingList[@ positionToCheck[i]];		
 				}	
 			}	
 		}
@@ -657,19 +657,19 @@ function getTarget(unit)
 		else if position == 1
 		{
 			positionToCheck = 2;				
-			var target = enemyList[@ positionToCheck];
+			var target = opposingList[@ positionToCheck];
 			if target != noone && target.concious
 			{
 				//log("Targeting: " + string(target.name));						
-				return enemyList[@ positionToCheck];		
+				return opposingList[@ positionToCheck];		
 			}	
 			// And then check far
 			positionToCheck = 3;
-			var target = enemyList[@ positionToCheck];			
+			var target = opposingList[@ positionToCheck];			
 			if target != noone && target.concious
 			{
 				//log("Targeting: " + string(target.name));										
-				return enemyList[@ positionToCheck];	
+				return opposingList[@ positionToCheck];	
 			}	
 		}
 		
@@ -677,26 +677,26 @@ function getTarget(unit)
 		else if position == 3
 		{
 			positionToCheck = 2;
-			var target = enemyList[@ positionToCheck];
+			var target = opposingList[@ positionToCheck];
 			if target != noone && target.concious
 			{
 				//log("Targeting: " + string(target.name));				
-				return enemyList[@ positionToCheck];		
+				return opposingList[@ positionToCheck];		
 			}	
 			// And then check far
 			positionToCheck = 1;				
-			var target = enemyList[@ positionToCheck];			
+			var target = opposingList[@ positionToCheck];			
 			if target != noone && target.concious
 			{
 				//log("Targeting: " + string(target.name));				
-				return enemyList[@ positionToCheck];	
+				return opposingList[@ positionToCheck];	
 			}	
 		}
 	}
 	// Long range enemies attack a random target
-	else if unit.alignment == Alignment.Foe && range >= Range.Long
+	else if chooseTarget = false || (unit.alignment == Alignment.Foe && range >= Range.Long)
 	{
-		return getRandomTarget(enemyList);
+		return getRandomTarget(opposingList);
 	}
 	// Long range player characters attack a chosen target
 	else if unit.alignment == Alignment.Friend && range >= Range.Long

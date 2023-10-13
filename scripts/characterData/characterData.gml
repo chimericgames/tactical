@@ -58,7 +58,7 @@ global.passives =
 	perniciousHorticulturist :
 	{
 		name : "Pernicious Horticulturist",
-		description : "Poison items have a 50% chance to not consume a charge when used. Ally's poison ailments deal an additional poison stack to unpoisoned targets.",
+		description : "Has a chance to create a poison item whenever they move on the map. Poison items created this way deliver an additional poison stack.",
 	},		
 	noxiousBloom :
 	{
@@ -465,11 +465,11 @@ global.battleChoices =
 		manaCost : 1,
 		description : "A desperate attack that adds random damage up to the attacker's missing hitpoints.",
 	},
-	takeDown :
+	shadestep :
 	{
-		name : "Take down",	
+		name : "Shadestep",	
 		manaCost : 1,
-		description : "Attacks, dealing additional damage for each negative token on the target.",
+		description : "Becomes concealed. While concealed, has +7% critical strike chance with their next attack.",
 	},
 }
 
@@ -1163,7 +1163,7 @@ global.characters =
 		swiftness : 7,
 		vitality : 4,
 		willpower : 3,
-		active : global.battleChoices.takeDown,
+		active : global.battleChoices.shadestep,
 		passive : [ global.passives.noxiousBloom, global.passives.perniciousHorticulturist ],
 		items : [ global.items.vipersVenom, global.items.nectarUnguent ],
 		// Adventure skills
