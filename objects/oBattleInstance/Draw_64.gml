@@ -112,7 +112,7 @@ for (var i = 1; i <= 6; ++i)
 var battleLogSize = array_length(global.battleLog);
 for (var i=0; i<battleLogSize; i++)
 {
-	draw_set_alpha(2 - .05 * i);
+	draw_set_alpha(2.25 - .15 * i);
 	draw_text(menuX,window_get_height()-leading*(i+2),string(global.battleLog[i])); ii++;
 	draw_set_alpha(1);
 }
@@ -162,14 +162,14 @@ if displayUnitStats
 	// Draw active character stats
 	if activeEnemy != noone
 	{
-		drawCharacterStats(activeCharacter, activeEnemy, window_get_width()-500, 400);
+		drawCharacterStats(activeCharacter, activeEnemy, window_get_width()-450, 400);
 		//drawCharacterStats(activeEnemy, activeCharacter, window_get_width()-500, 400);
 	}
 }
 
 // Draw the turn order and list the health of all party members
 ii = 0;
-var turnOrderX = window_get_width()-500;
+var turnOrderX = window_get_width()-450;
 var turnOrderY = 20;
 var turnOrderCount = array_length(turnOrder);
 draw_text(turnOrderX,turnOrderY+ii*leading,"Turn: " + string(turnIndex+1)); ii++;
@@ -189,7 +189,6 @@ for (var i=0; i<queuedActions; i++)
 	var action = actionQueue[i,1];
 	draw_text(turnOrderX+325,turnOrderY+ii*leading,string(action)); ii++;
 }
-
 
 // Debug mode
 if global.debugMode
