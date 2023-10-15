@@ -58,12 +58,12 @@ global.passives =
 	perniciousHorticulturist :
 	{
 		name : "Pernicious Horticulturist",
-		description : "Has a chance to create a poison item whenever they move on the map. Poison items created this way deliver an additional poison stack.",
+		description : "Has a chance to create a poison item whenever they move on the map. Poison items created this way deliver an additional poison token.",
 	},		
 	noxiousBloom :
 	{
 		name : "Noxious Bloom",
-		description : "This unit's critical hits against poisoned enemies trigger Noxious Bloom on them. Noxious bloom consumes all poison stacks, deals that much true damage, and then divides that many poison stacks amongst surrounding enemies." // Always round up?
+		description : "This unit's critical hits against poisoned enemies trigger Noxious Bloom on them. Noxious bloom consumes all poison tokens, deals that much true damage, and then divides that many poison tokens amongs surrounding enemies." // Always round up?
 	},		
 	beguiling :
 	{
@@ -152,6 +152,17 @@ global.passives =
 		name : "Toxophilite",
 		description : "Quiver items have a 50% chance to not consume a charge when used. Quiver items are never consumed if used while concealed.",
 	},
+	violentDelights :
+	{
+		name : "violentDelights",
+		description : "",
+	},
+	beguilingElusion :
+	{
+		name : "beguilingElusion",
+		description : "",
+	},
+
 }
 
 global.adventurePassives =
@@ -465,6 +476,12 @@ global.battleChoices =
 		manaCost : 1,
 		description : "A desperate attack that adds random damage up to the attacker's missing hitpoints.",
 	},
+	glimmerStrike :
+	{
+		name : "Glimmer Strike",	
+		manaCost : 2,
+		description : "", 
+	},	
 	shadestalk :
 	{
 		name : "Shadestalk",	
@@ -809,6 +826,11 @@ global.weapons =
 		tags : [ global.weaponProperties.splitting ],
 	},	
 	
+	dualAxes :
+	{
+		tags : [ global.weaponProperties.splitting, global.weaponProperties.dual, global.weaponProperties.small ],
+	},		
+	
 	poleAxe :
 	{
 		tags : [ global.weaponProperties.splitting, global.weaponProperties.pole, global.weaponProperties.large ],
@@ -942,6 +964,7 @@ calculateWeaponStats(global.weapons.sword);
 calculateWeaponStats(global.weapons.heavySword);
 calculateWeaponStats(global.weapons.spear);
 calculateWeaponStats(global.weapons.axe);
+calculateWeaponStats(global.weapons.dualAxes);
 calculateWeaponStats(global.weapons.poleAxe);
 calculateWeaponStats(global.weapons.greatAxe);
 calculateWeaponStats(global.weapons.mace);
@@ -1142,6 +1165,37 @@ global.characters =
 		cooking : Skill.Decent,
 		adventurePassive : [],
 		protects : [],
+	},
+	
+	idris : 
+	{
+		name : "Idris", // Considered: Acacia, Maia
+		race : "Fae-Touched",
+		alignment : Alignment.Friend,
+		size : Size.Normal,
+		weapon1 : global.weapons.dualAxes,
+		weapon1Name : "Twin Hatchets",
+		weapon2 : global.weapons.fists,
+		weapon2Name : "Nothing",
+		armor : global.armors.none,
+		armorName : "Faeweave Cloak",
+		strength : 6,
+		spirit : 5,
+		endurance : 4,
+		technique : 7,
+		swiftness : 8,
+		vitality : 3,
+		willpower : 2,
+		active : global.battleChoices.glimmerStrike,
+		passive : [ global.passives.violentDelights, global.passives.beguilingElusion ],
+		items : [ ],
+		// Adventure skills
+		leadership : Skill.Decent,
+		scouting : Skill.Skilled,
+		huntingGathering : Skill.Decent,
+		cooking : Skill.Poor,
+		adventurePassive : [ ],
+		protects : [ ],		
 	},
 	
 	braith :
@@ -1487,7 +1541,7 @@ global.characters =
 };
 
 // Create a list of characters
-global.characterList = [ global.characters.sigrid, global.characters.braith, global.characters.thistle, global.characters.cassiel, global.characters.citalli, global.characters.acatl, global.characters.demi, global.characters.alkimos, global.characters.helle, global.characters.ilse ];
+global.characterList = [ global.characters.sigrid, global.characters.idris, global.characters.braith, global.characters.thistle, global.characters.cassiel, global.characters.citalli, global.characters.acatl, global.characters.demi, global.characters.alkimos, global.characters.helle, global.characters.ilse ];
 global.characterCount = array_length(global.characterList);
 
 // Enemies
